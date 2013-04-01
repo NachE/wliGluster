@@ -1,12 +1,13 @@
 <html><head><title>Web Line Interface for GlusterFS (WLI Gluster)</title>
+<link rel="stylesheet" href="style/main.css" />
 </head>
 <body>
 <div id="wrapp">
    <div id="view"></div>
    <div id="console"></div>
-   <div id="cli">
+   <div id="cliinput">
       <form id="clicommand" action="" method="post">
-         <input type="text" name="command" />
+         <input id="inputtext" type="text" name="command" />
          <input type="submit" value="Send" />
       </form>
    </div>

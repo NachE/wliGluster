@@ -1,0 +1,40 @@
+#console p{
+	font-size: 0.6em;
+	margin: 0px;
+	font-family: verdana;
+}
+
+
+#cliinput, #console{
+        position: fixed;
+        left: 0px;
+        bottom: 0px;
+        height: 30px;
+        width: 100%;
+        background: #999;
+        z-index: 2;
+        background-color: rgba(0, 0, 0, .5);
+	padding: 2px;
+	padding-left: 10px;
+}
+
+#console{
+	background: #111111;
+	border: 1px solid #000000;	
+	bottom: 34px;
+	height: 100px;
+	overflow-y: scroll;
+	color: #ffffff;
+}
+
+#cliinput input{
+	border: 1px solid #000000;
+	background-color: #999;
+	color: #0000ff;
+	margin: 0px;
+	padding: 5px;
+}
+
+#cliinput #inputtext{
+	width: 80%;
+}
