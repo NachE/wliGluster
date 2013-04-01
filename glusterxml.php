@@ -5,7 +5,9 @@ echo system
 	(
 		$glusterbin
 		." ".
-		escapeshellcmd($_GET['command']), 
+		escapeshellcmd($_GET['command'])
+		." --xml".
+		, 
 		$retval
 	);
 ?>
