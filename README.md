@@ -1,3 +1,3 @@
 WLIG
 ====
-Web Line Interface for GlusterFS
+Web Line Interface for GlusterFS.
