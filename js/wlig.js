@@ -1,7 +1,6 @@
 $("#clicommand").submit(function() {
 	printC(" ");
 	printC("[$] "+$("input:first").val());
-
 	if($("input:first").val().length > 0){
 		var jqxhr = $.get("glusterxml.php",{ command: $("input:first").val() },  function() {
 			printC("Ok, wait...");
@@ -9,14 +8,15 @@ $("#clicommand").submit(function() {
 		.done(function(data) 
 		{     
 			printC("Received data: " + data);
-
-			var errnum = $(data).find('wlireturna').text();
-			alert(errnum);	
-			var rawout = $(data).find('raw').text();
-			printC("Error num: "+errnum );
-			printC("Error command output: "+rawout);
-
-			//alert("Data Loaded: " + data);
+			//control error
+			var errnum = $(data).find('wlireturn').text();
+			if(errnum > 0){
+				var rawout = $(data).find('raw').text();
+				printC("Error num: "+errnum );
+				printC("Error command output: "+rawout);
+			}else{
+				//here we process data
+			}
 		})
 		.fail(function() {
 			printC("[!] ERROR ON THE WLIGLUSTER SERVER SIDE!");
@@ -25,6 +25,7 @@ $("#clicommand").submit(function() {
 
 	}
 
+	$("input:first").val("");
 	return false;
 });
 
