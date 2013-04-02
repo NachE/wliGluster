@@ -4,8 +4,9 @@ $('form#clicommand').submit(function() {
 	printC(" ");
 	printC("[$] "+$("input:first").val());
 	if($("input:first").val().length > 0){
+		printC("Ok, wait...");
 		var jqxhr = $.get("glusterxml.php",{ command: $("input:first").val() },  function() {
-			printC("Ok, wait...");
+			printC("Procesing response...");
 		})
 		.done(function(data) 
 		{     
@@ -26,6 +27,9 @@ $('form#clicommand').submit(function() {
 
 				$(data).find('cliOutput > volStart').each(function(){
 					volumen_start(data); });
+
+				$(data).find('cliOutput > volStop').each(function(){
+					volumen_stop(data); });
 
 			}
 		})
@@ -50,12 +54,31 @@ function send_command(command){
 	$("form#clicommand").submit();
 }
 
+function add_tab(id){//LOOK if we can improve this. themable?
+
+	var tabid="tab"+id;
+	if ($("#view > #"+tabid).length > 0){
+		return $("#view > #"+tabid);
+	}else{
+		return $("#view").append("<div id=\""+tabid+"\" class=\"viewtab\"></div>").find("#"+tabid);
+	}
+	
+}
 
 function volumen_start(gxml){
 	$(gxml).find('cliOutput > volStart').each(function(){
 		var volname = $(this).find('volname').text();
-	});	
+	});
+	send_command("volume info");
 }	
+
+function volumen_stop(gxml){
+        $(gxml).find('cliOutput > volStop').each(function(){
+                var volname = $(this).find('volname').text();
+        });
+	send_command("volume info");
+}
+
 
 function volumen_info(gxml){
 
@@ -94,9 +117,13 @@ function volumen_info(gxml){
 			$(this).find('bricks > brick').each(function(){
 				bricks = bricks + themehtmlbrick.replace("{BRICKNAME}", $(this).text());
 			});
+
+			//add tab to view
+			var tabobj = add_tab("volumeinfo");
 			
 			//insert html for volume
-			$('#view').html(themehtml);
+			//$('#view').html(themehtml);
+			tabobj.html(themehtml);
 			//insert html brick info for this volume. I dont like this, look later.
 			$("#"+divguid+" .bricklist").html(bricks);
 
