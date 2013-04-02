@@ -18,7 +18,6 @@ header('Content-Type: text/xml');
 		echo "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><root><wlireturn>$retval</wlireturn><raw>".htmlspecialchars(implode("\n",$output))."</raw></root>";
 	}else{
 		echo implode("", $output);
-		echo $command;
 	}
 
 ?>
