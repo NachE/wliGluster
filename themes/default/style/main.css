@@ -14,7 +14,6 @@ p, h1, h2, h3{margin: 0px;}
 	font-family: verdana;
 }
 
-
 #cliinput, #console{
         position: fixed;
         left: 0px;
@@ -49,9 +48,31 @@ p, h1, h2, h3{margin: 0px;}
 	width: 80%;
 }
 
+ul {
+	list-style-type: none;
+	padding: 0px;
+	margin: 0px;
+}
 
 .volumen{
 	float: left;
 	padding: 2px;
 	border: 1px solid #000000;
+}
+
+.volmenu{
+	cursor: pointer;
+	border: 4px outset;
+	padding: 2px;
+}
+.volmenuopts{
+	display: none;
+}
+
+.volmenuopts li a:link{
+	display: block;
+}
+.volmenuopts li a:hover{
+	background-color: #999999;
+	color: #0000ff;
 }
