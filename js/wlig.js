@@ -1,6 +1,6 @@
 var config_theme = "default";
 
-$("#clicommand").submit(function() {
+$('form#clicommand').submit(function() {
 	printC(" ");
 	printC("[$] "+$("input:first").val());
 	if($("input:first").val().length > 0){
@@ -24,6 +24,9 @@ $("#clicommand").submit(function() {
 				$(data).find('cliOutput > volInfo').each(function(){
 					volumen_info(data); });
 
+				$(data).find('cliOutput > volStart').each(function(){
+					volumen_start(data); });
+
 			}
 		})
 		.fail(function() {
@@ -38,9 +41,21 @@ $("#clicommand").submit(function() {
 });
 
 function printC(msg){
-	$("#console").append("<p>"+msg+"</p>");
+	$('#console').append("<p>"+msg+"</p>");
 	$('#console').animate({ scrollTop: $('#console').get(0).scrollHeight}, 15);
 }
+
+function send_command(command){
+	$('input#inputtext').val(command);
+	$("form#clicommand").submit();
+}
+
+
+function volumen_start(gxml){
+	$(gxml).find('cliOutput > volStart').each(function(){
+		var volname = $(this).find('volname').text();
+	});	
+}	
 
 function volumen_info(gxml){
 
@@ -49,10 +64,11 @@ function volumen_info(gxml){
 		//parse every volume section
 		$(gxml).find('cliOutput > volInfo > volumes > volume').each(function(){
 
-			var divguid = guid();			
+			var volname = $(this).find('name').text()
+			var divguid = "volinfobox"+volname;	
 			//replace {VAR} with their value
 			themehtml = themehtml.replace("{UID}", divguid );
-			themehtml = themehtml.replace("{NAME}", $(this).find('name').text());
+			themehtml = themehtml.replace("{NAME}", volname);
 			themehtml = themehtml.replace("{ID}", $(this).find('id').text());
 
 			// Translate numeric values for Type of gluster
@@ -67,7 +83,7 @@ function volumen_info(gxml){
 			// 0 = Stoped?
 			var volumestatus = new Array();
 			volumestatus[1] = "Started";
-			volumestatus[0] = "Stopped";
+			volumestatus[2] = "Stopped";
 			themehtml = themehtml.replace("{STATUS}",volumestatus[ $(this).find('status').text() ]);
 
 			// Get html for one brick
@@ -83,13 +99,24 @@ function volumen_info(gxml){
 			$('#view').html(themehtml);
 			//insert html brick info for this volume. I dont like this, look later.
 			$("#"+divguid+" .bricklist").html(bricks);
+
+			//add events
+			$("#"+divguid+" .menu_volumen_stop").click(function() {
+				send_command("volume stop "+volname); //WARNING. WILL THIS WORK WITH MULTIPLE VOLUMES??
+			});						//WARNING2 -> LOOK HOW TO SAVE STDIN CONFIRMATION
+
+			$("#"+divguid+" .menu_volumen_start").click(function() {
+				send_command("volume start "+volname); //WARNING. WILL THIS WORK WITH MULTIPLE VOLUMES??
+			});
+
+
 		});
 	});
 }
 
 function volumen_status(data){ alert("vol status"); }
 
-
+//unused? remove?
 function guid(){
 	return ((new Date()).getTime()).toString() + (  Math.round( (1 + Math.random()) * 0x10000 )    ).toString();
 }
