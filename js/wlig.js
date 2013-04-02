@@ -1,3 +1,5 @@
+var config_theme = "default";
+
 $("#clicommand").submit(function() {
 	printC(" ");
 	printC("[$] "+$("input:first").val());
@@ -16,6 +18,14 @@ $("#clicommand").submit(function() {
 				printC("Error command output: "+rawout);
 			}else{
 				//here we process data
+				$(data).find('cliOutput > volStatus').each(function(){
+					volumen_status(data); });
+				
+				$(data).find('cliOutput > volInfo').each(function(){
+					volumen_info(data); });
+			
+			
+
 			}
 		})
 		.fail(function() {
@@ -33,3 +43,24 @@ function printC(msg){
 	$("#console").append("<p>"+msg+"</p>");
 	$('#console').animate({ scrollTop: $('#console').get(0).scrollHeight}, 15);
 }
+
+function volumen_info(gxml){
+
+	$.get('themes/'+config_theme+'/volume_info.html', function (themehtml) {
+		$(gxml).find('cliOutput > volInfo > volumes > volume').each(function(){
+
+			themehtml = themehtml.replace("{NAME}", $(this).find('name').text());
+			themehtml = themehtml.replace("{ID}", $(this).find('id').text());
+
+
+			$(this).find('bricks > brick').each(function(){
+				//alert($(this).text());
+			});
+		});
+
+		$('#view').html(themehtml);
+	});
+
+}
+
+function volumen_status(data){ alert("vol status"); }
