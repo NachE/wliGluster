@@ -103,7 +103,7 @@ function volumen_info(gxml){
 			//add events
 			$("#"+divguid+" .menu_volumen_stop").click(function() {
 				send_command("volume stop "+volname); //WARNING. WILL THIS WORK WITH MULTIPLE VOLUMES??
-			});						//WARNING2 -> LOOK HOW TO SAVE STDIN CONFIRMATION
+			});						
 
 			$("#"+divguid+" .menu_volumen_start").click(function() {
 				send_command("volume start "+volname); //WARNING. WILL THIS WORK WITH MULTIPLE VOLUMES??

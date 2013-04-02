@@ -3,8 +3,12 @@ $glusterbin="/usr/sbin/gluster";
 header('Content-Type: text/xml');
 	$output = array();
 
+	$saveconfirmation="";
+	if($_GET["saveconfirmation"]){
 
-	$command=$glusterbin." ".escapeshellcmd($_GET['command'])." --xml 2>&1";
+	}
+
+	$command=$glusterbin." --mode=script ".escapeshellcmd($_GET['command'])." --xml 2>&1";
 
 	exec
 	(
