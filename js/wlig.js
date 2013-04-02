@@ -1,16 +1,24 @@
 var config_theme = "default";
 
+
+$(document).ready(function() {
+	printC("Web Line Interface for Gluster");
+});
+
+
 $('form#clicommand').submit(function() {
+	var command = $("input#inputtext").val();
 	printC(" ");
-	printC("[$] "+$("input:first").val());
-	if($("input:first").val().length > 0){
+	printC("[$] "+command);
+	if(command.length > 0){
 		printC("Ok, wait...");
-		var jqxhr = $.get("glusterxml.php",{ command: $("input:first").val() },  function() {
-			printC("Procesing response...");
+		var jqxhr = $.get("glusterxml.php",{ command: command },  function() {
+			//printC("Procesing response...");
+			console.log("Recived data from server, procesing...")
 		})
 		.done(function(data) 
 		{     
-			printC("Received data: " + data);
+			console.log("Received data: " + data);
 			//control error
 			var errnum = $(data).find('wlireturn').text();
 			if(errnum > 0){
@@ -36,7 +44,7 @@ $('form#clicommand').submit(function() {
 		.fail(function() {
 			printC("[!] ERROR ON THE WLIGLUSTER SERVER SIDE!");
 		 })
-		.always(function() { printC("Done"); });
+		.always(function() { printC("Done "+command);  });
 
 	}
 
@@ -46,7 +54,7 @@ $('form#clicommand').submit(function() {
 
 function printC(msg){
 	$('#console').append("<p>"+msg+"</p>");
-	$('#console').animate({ scrollTop: $('#console').get(0).scrollHeight}, 15);
+	$('#console').animate({ scrollTop: $('#console').get(0).scrollHeight}, 100);
 }
 
 function send_command(command){
@@ -73,12 +81,11 @@ function volumen_start(gxml){
 }	
 
 function volumen_stop(gxml){
-        $(gxml).find('cliOutput > volStop').each(function(){
-                var volname = $(this).find('volname').text();
-        });
+	$(gxml).find('cliOutput > volStop').each(function(){
+		var volname = $(this).find('volname').text();
+	});
 	send_command("volume info");
 }
-
 
 function volumen_info(gxml){
 
