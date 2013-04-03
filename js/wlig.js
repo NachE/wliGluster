@@ -33,6 +33,9 @@ $('form#clicommand').submit(function() {
 				$(data).find('cliOutput > volInfo').each(function(){
 					volumen_info(data); });
 
+				$(data).find('cliOutput > volList').each(function(){
+					volumen_list(data); });
+
 				$(data).find('cliOutput > volStart').each(function(){
 					volumen_start(data); });
 
@@ -63,14 +66,12 @@ function send_command(command){
 }
 
 function add_tab(id){//LOOK if we can improve this. themable?
-
 	var tabid="tab"+id;
 	if ($("#view > #"+tabid).length > 0){
 		return $("#view > #"+tabid);
 	}else{
 		return $("#view").append("<div id=\""+tabid+"\" class=\"viewtab\"></div>").find("#"+tabid);
 	}
-	
 }
 
 function volumen_start(gxml){
@@ -85,6 +86,33 @@ function volumen_stop(gxml){
 		var volname = $(this).find('volname').text();
 	});
 	send_command("volume info");
+}
+
+function volumen_list(gxml){
+	$.get('themes/'+config_theme+'/volume_list.html', function (themehtml) {
+		//var onevolume = $(themehtml).find("#volumelist").html();
+		var onevolume = $(themehtml).html();
+		//alert(onevolume.html());
+		var volumelistshtml="";
+		$(gxml).find('cliOutput > volList > volume').each(function(){
+			volumelistshtml = volumelistshtml + onevolume.replace("{NAME}", $(this).text())
+						.replace("{VOLID}", "volid"+$(this).text())
+						.replace("{HREFNAME}", $(this).text());
+		});
+
+		//add new info tab
+		var tabobj = add_tab("volumelist");
+		//add html to tab
+		tabobj.html(themehtml);
+		//add the list of volumes to id=volumelist
+		$("#tabvolumelist #volumelist").html(volumelistshtml);
+
+		//adding events
+		$("#tabvolumelist #volumelist .volumelistelement .volumeonclick").click(function(){
+			var volume = $(this).attr('href').replace("#", "");//WARNING, CAN VOLUMES HAVE # IN THEIR NAMES?
+			send_command("volume info "+volume);
+		});
+	});
 }
 
 function volumen_info(gxml){
@@ -125,25 +153,22 @@ function volumen_info(gxml){
 				bricks = bricks + themehtmlbrick.replace("{BRICKNAME}", $(this).text());
 			});
 
-			//add tab to view
+			//add tab to view. id = tab+id_arg_passed
 			var tabobj = add_tab("volumeinfo");
-			
 			//insert html for volume
 			//$('#view').html(themehtml);
 			tabobj.html(themehtml);
 			//insert html brick info for this volume. I dont like this, look later.
-			$("#"+divguid+" .bricklist").html(bricks);
+			$("#tabvolumeinfo #"+divguid+" .bricklist").html(bricks);
 
 			//add events
-			$("#"+divguid+" .menu_volumen_stop").click(function() {
+			$("#tabvolumeinfo #"+divguid+" .menu_volumen_stop").click(function() {
 				send_command("volume stop "+volname); //WARNING. WILL THIS WORK WITH MULTIPLE VOLUMES??
 			});						
 
-			$("#"+divguid+" .menu_volumen_start").click(function() {
+			$("#tabvolumeinfo #"+divguid+" .menu_volumen_start").click(function() {
 				send_command("volume start "+volname); //WARNING. WILL THIS WORK WITH MULTIPLE VOLUMES??
 			});
-
-
 		});
 	});
 }

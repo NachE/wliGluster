@@ -6,7 +6,9 @@
 </head>
 <body>
 <div id="wrapp">
-   <div id="view"></div>
+   <div id="view">
+      <ul id="tabs"></ul>
+   </div>
    <div id="console"></div>
    <div id="cliinput">
       <form id="clicommand" action="" method="post">
