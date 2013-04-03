@@ -1,10 +1,13 @@
 var config_theme = "default";
 
-
 $(document).ready(function() {
 	printC("Web Line Interface for Gluster");
-});
 
+	//making tabs events
+	$(document).on('click', '.tabitem', function(){
+		show_tab($(this).attr('href'));
+	});
+});
 
 $('form#clicommand').submit(function() {
 	var command = $("input#inputtext").val();
@@ -68,11 +71,21 @@ function send_command(command){
 function add_tab(id){//LOOK if we can improve this. themable?
 	var tabid="tab"+id;
 	if ($("#view > #"+tabid).length > 0){
-		return $("#view > #"+tabid);
+		var tabobj = $("#view > #"+tabid);
+		show_tab("#"+tabid);
 	}else{
-		return $("#view").append("<div id=\""+tabid+"\" class=\"viewtab\"></div>").find("#"+tabid);
+		$("#view > #tabs").append("<li id=\"btab"+tabid+"\"><a href=\"#"+tabid+"\" class=\"tabitem\">"+tabid+"</a></li>");
+		var tabobj = $("#view").append("<div id=\""+tabid+"\" class=\"viewtab\"></div>").find("#"+tabid);
+		show_tab("#"+tabid);
 	}
+	return tabobj;
 }
+
+function show_tab(tabid){
+                $('#view > .viewtab').hide();
+                $('#view > '+tabid).show();
+}
+
 
 function volumen_start(gxml){
 	$(gxml).find('cliOutput > volStart').each(function(){
