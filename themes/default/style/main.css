@@ -101,3 +101,24 @@ ul {
 	border: 1px solid #000000;
 	margin: 5px;
 }
+
+.selectedtab .tabitem{
+	font-weight: bold;
+	padding: 14px;
+	margin: 0px;
+}
+
+#view #tabvolumelist #volumelist .volumelistelement{
+	border: 1px solid #000000;
+	width: 49px;
+	height: 59px;
+	margin: 15px;
+	float: left;
+}
+
+#view #tabvolumelist #volumelist .volumelistelement a{
+	display: block;
+	height: 59px;
+}
+
+

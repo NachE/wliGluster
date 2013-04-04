@@ -89,9 +89,15 @@ function clear_tab(tabid){
 	$('#view > #tab'+tabid).empty();
 }
 
+function selected_tab(tabid){
+	$('#view > #tabs > li').removeClass("selectedtab");
+	$('#view > #tabs > #btab'+tabid).addClass("selectedtab");
+}
+
 function show_tab(tabid){
 	$('#view > .viewtab').hide();
 	$('#view > #'+tabid).show();
+	 selected_tab(tabid);
 }
 
 function show_climsg(gxml){
@@ -132,6 +138,10 @@ function volumen_list(gxml){
 						.replace("{VOLID}", "volid"+$(this).text())
 						.replace("{HREFNAME}", $(this).text());
 		});
+		//adding ALL option that show all vols
+		volumelistshtml = volumelistshtml + onevolume.replace("{NAME}", "ALL")
+			.replace("{VOLID}", "all")
+			.replace("{HREFNAME}", "all");
 
 		//add new info tab
 		var tabobj = add_tab("volumelist");
