@@ -1,8 +1,12 @@
 var config_theme = "default";
+var config_autoinit = true;
 
 $(document).ready(function() {
 	printC("Web Line Interface for Gluster");
-	send_command("volume list");
+	if(config_autoinit){
+		printC("Auto init enabled, sending first command.");
+		send_command("volume list");
+	}
 	//making tabs events
 	$(document).on('click', '.tabitem', function(){
 		show_tab($(this).attr('href').replace("#",""));
