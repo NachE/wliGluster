@@ -61,19 +61,25 @@ ul {
 	border: 1px solid #000000;
 }
 
-.volmenu{
+#tabvolumeinfo .volumen .volmenu{
 	cursor: pointer;
 	border: 4px outset;
 	padding: 2px;
 }
-.volmenuopts{
+#tabvolumeinfo .volumen .volmenu .volmenuopts{
 	display: none;
+	position: absolute;
+	background-color: #ffffff;
+	border: 1px solid #000000;
+	padding: 10px;
 }
 
-.volmenuopts li a:link{
+#tabvolumeinfo .volumen .volmenu .volmenuopts li a:link{
+	padding: 4px;
 	display: block;
 }
-.volmenuopts li a:hover{
+
+#tabvolumeinfo .volumen  .volmenu .volmenuopts li a:hover{
 	background-color: #999999;
 	color: #0000ff;
 }
@@ -84,7 +90,7 @@ ul {
 	left: 0px;
 	width: 100%;
 	height: auto;
-	padding-bottom: 150px;
+	padding-bottom: 200px;
 	background-color: #ffffff;
 	border-top: 1px solid #000000;
 }
