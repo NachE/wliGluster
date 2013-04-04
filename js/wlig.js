@@ -92,7 +92,15 @@ function show_tab(tabid){
 
 function show_climsg(gxml){
 	//TODO: SEE opRet to determine if error or not
-	alert($(gxml).find('cliOutput > output').text());
+	if( $(gxml).find('cliOutput > opRet').text() < 0  ){
+		var msgtype="[!!] Error ("
+			+$(gxml).find('cliOutput > opRet').text()+" | "
+			+$(gxml).find('cliOutput > opErrno').text()+"):\n\n\n";
+			alert(msgtype+$(gxml).find('cliOutput > output').text());
+	}else{
+		printC("Info: "+$(gxml).find('cliOutput > output').text());
+	}
+
 }
 
 function volumen_start(gxml){
@@ -137,7 +145,6 @@ function volumen_list(gxml){
 }
 
 function volumen_info(gxml){
-
 	//get theme file
 	$.get('themes/'+config_theme+'/volume_info.html', function (themehtml) {
 		//parse every volume section
@@ -200,7 +207,8 @@ function volumen_info(gxml){
 	});
 }
 
-function volumen_status(data){ alert("vol status"); }
+function volumen_status(data){ 
+alert("vol status"); }
 
 //unused? remove?
 function guid(){
