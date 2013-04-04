@@ -2,7 +2,7 @@ var config_theme = "default";
 
 $(document).ready(function() {
 	printC("Web Line Interface for Gluster");
-
+	send_command("volume list");
 	//making tabs events
 	$(document).on('click', '.tabitem', function(){
 		show_tab($(this).attr('href').replace("#",""));
