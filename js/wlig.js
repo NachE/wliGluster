@@ -15,6 +15,7 @@ $('form#clicommand').submit(function() {
 	printC("[$] "+command);
 	if(command.length > 0){
 		printC("Ok, wait...");
+		console.log("sending: glusterxml.php?command="+command.replace(/ /g,"+"));
 		var jqxhr = $.get("glusterxml.php",{ command: command },  function() {
 			//printC("Procesing response...");
 			console.log("Recived data from server, procesing...")
@@ -45,6 +46,9 @@ $('form#clicommand').submit(function() {
 				$(data).find('cliOutput > volStop').each(function(){
 					volumen_stop(data); });
 
+				$(data).find('cliOutput > cliOp').each(function(){
+					show_climsg(data);	
+				});
 			}
 		})
 		.fail(function() {
@@ -82,10 +86,14 @@ function add_tab(id){//LOOK if we can improve this. themable?
 }
 
 function show_tab(tabid){
-                $('#view > .viewtab').hide();
-                $('#view > '+tabid).show();
+	$('#view > .viewtab').hide();
+	$('#view > '+tabid).show();
 }
 
+function show_climsg(gxml){
+	//TODO: SEE opRet to determine if error or not
+	alert($(gxml).find('cliOutput > output').text());
+}
 
 function volumen_start(gxml){
 	$(gxml).find('cliOutput > volStart').each(function(){
@@ -163,7 +171,7 @@ function volumen_info(gxml){
 			// Loop to construct html for every brick
 			var bricks = "";
 			$(this).find('bricks > brick').each(function(){
-				bricks = bricks + themehtmlbrick.replace("{BRICKNAME}", $(this).text());
+				bricks = bricks + themehtmlbrick.replace(/{BRICKNAME}/g, $(this).text());
 			});
 
 			//add tab to view. id = tab+id_arg_passed
@@ -175,12 +183,18 @@ function volumen_info(gxml){
 			$("#tabvolumeinfo #"+divguid+" .bricklist").html(bricks);
 
 			//add events
-			$("#tabvolumeinfo #"+divguid+" .menu_volumen_stop").click(function() {
-				send_command("volume stop "+volname); //WARNING. WILL THIS WORK WITH MULTIPLE VOLUMES??
+			$("#tabvolumeinfo #"+divguid+" .menu_volumen_stop").click(function(){
+				if (confirm("Sure?")) {
+					send_command("volume stop "+volname); //WARNING. WILL THIS WORK WITH MULTIPLE VOLUMES??
+				}
 			});						
 
-			$("#tabvolumeinfo #"+divguid+" .menu_volumen_start").click(function() {
+			$("#tabvolumeinfo #"+divguid+" .menu_volumen_start").click(function(){
 				send_command("volume start "+volname); //WARNING. WILL THIS WORK WITH MULTIPLE VOLUMES??
+			});
+
+			$("#tabvolumeinfo #"+divguid+" .option_log_rotate").click(function(){
+				send_command("volume log rotate gv0 "+$(this).attr('href').replace("#",""));//WARNING, BRICK CAN HAVE # IN THEIR NAME?
 			});
 		});
 	});
