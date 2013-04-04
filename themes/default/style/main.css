@@ -116,13 +116,25 @@ ul {
 	float: left;
 }
 
-#view #tabvolumelist #volumelist .volumelistelement a{
+/*#view #tabvolumelist #volumelist .volumelistelement a{
 	display: block;
 	height: 59px;
-}
+}*/
 
 #view #tabvolumelist #volumelist .volumelistelement a:hover{
 	background-color: #0f6;
 }
 
-
+#tabvolumelist #volumelist .volumelistelement .volumelistmenu{
+	cursor: pointer;
+	margin-top: 10px;
+	background-color: #ffffff;
+	border: 1px solid #000000;
+}
+#tabvolumelist #volumelist .volumelistelement .volumelistmenu .volumelistmenugroup{
+	position: absolute;
+	display: none;
+	background-color: #ffffff;
+	border: 1px solid #000000;
+	padding: 10px;
+}

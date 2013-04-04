@@ -140,12 +140,14 @@ function volumen_list(gxml){
 		$(gxml).find('cliOutput > volList > volume').each(function(){
 			volumelistshtml = volumelistshtml + onevolume.replace("{NAME}", $(this).text())
 						.replace("{VOLID}", "volid"+$(this).text())
-						.replace("{HREFNAME}", $(this).text());
+						.replace("{HREFNAME}", $(this).text())
+						.replace(/{VOLNAME}/g,$(this).text());
 		});
 		//adding ALL option that show all vols
 		volumelistshtml = volumelistshtml + onevolume.replace("{NAME}", "ALL")
 			.replace("{VOLID}", "all")
-			.replace("{HREFNAME}", "all");
+			.replace("{HREFNAME}", "all")
+			.replace(/{VOLNAME}/g,"all");
 
 		//add new info tab
 		var tabobj = add_tab("volumelist");
@@ -159,6 +161,40 @@ function volumen_list(gxml){
 			var volume = $(this).attr('href').replace("#", "");//WARNING, CAN VOLUMES HAVE # IN THEIR NAMES?
 			send_command("volume info "+volume);
 		});
+		
+//Maybe we need to make specific functions for each command to do not repeat things like confirmation on volume stop
+$('#tabvolumelist #volumelist .volumelistelement .volumelistmenu').click(function(){
+$(this).find('.volumelistmenugroup').toggle()
+});
+$('#tabvolumelist #volumelist .volumelistelement .volumelistmenu .volumelistmenugroup .opt_volumeinfo').click(function(){
+send_command("volume info "+$(this).attr('href').replace("#",""));
+});
+$('#tabvolumelist #volumelist .volumelistelement .volumelistmenu .volumelistmenugroup .opt_volumestatus').click(function(){
+send_command("volume status "+$(this).attr('href').replace("#",""));
+});
+$('#tabvolumelist #volumelist .volumelistelement .volumelistmenu .volumelistmenugroup .opt_volumestatusdetail').click(function(){
+send_command("volume status "+$(this).attr('href').replace("#","")+" detail");
+});
+$('#tabvolumelist #volumelist .volumelistelement .volumelistmenu .volumelistmenugroup .opt_volumestop').click(function(){
+send_command("volume stop "+$(this).attr('href').replace("#",""));
+});
+$('#tabvolumelist #volumelist .volumelistelement .volumelistmenu .volumelistmenugroup .opt_volumestart').click(function(){
+send_command("volume start "+$(this).attr('href').replace("#",""));
+}); 
+
+/*
+			<li class="volumelistmenuitem"><a href="#{VOLNAME}" class="opt_volumeinfo">Volume info</a></li>
+                        <li class="volumelistmenuitem"><a href="#{VOLNAME}" class="opt_volumestatus">Volume status</a></li>
+                        <li class="volumelistmenuitem"><a href="#{VOLNAME}" class="opt_volumestatusdetail">Volume status detail</a></li>
+                        <li class="volumelistmenuitem"><a href="#{VOLNAME}" class="opt_volumestop">Volume stop</a></li>
+                        <li class="volumelistmenuitem"><a href="#{VOLNAME}" class="opt_volumestart">Volume start</a></li>
+
+*/
+
+
+
+	
+
 	});
 }
 

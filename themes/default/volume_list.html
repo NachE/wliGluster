@@ -1,5 +1,15 @@
 <div id="volumelist">
         <div class="volumelistelement">
                 <a href="#{HREFNAME}" id="{VOLID}" class="volumeonclick">{NAME}</a>
+		<div class="volumelistmenu">
+			<p>Actions</p>
+			<ul class="volumelistmenugroup">
+			<li class="volumelistmenuitem"><a href="#{VOLNAME}" class="opt_volumeinfo">Volume info</a></li>
+			<li class="volumelistmenuitem"><a href="#{VOLNAME}" class="opt_volumestatus">Volume status</a></li>
+			<li class="volumelistmenuitem"><a href="#{VOLNAME}" class="opt_volumestatusdetail">Volume status detail</a></li>
+			<li class="volumelistmenuitem"><a href="#{VOLNAME}" class="opt_volumestop">Volume stop</a></li>
+			<li class="volumelistmenuitem"><a href="#{VOLNAME}" class="opt_volumestart">Volume start</a></li>
+			</ul>
+		</div>
         </div>
 </div>
