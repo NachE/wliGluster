@@ -54,9 +54,10 @@ ul {
 	margin: 0px;
 }
 
-.volumen{
+#tabvolumeinfo .volumen{
 	float: left;
 	padding: 2px;
+	margin: 10px;
 	border: 1px solid #000000;
 }
 
@@ -83,6 +84,7 @@ ul {
 	left: 0px;
 	width: 100%;
 	height: auto;
+	padding-bottom: 150px;
 	background-color: #ffffff;
 	border-top: 1px solid #000000;
 }

@@ -85,6 +85,8 @@ function add_tab(id){//LOOK if we can improve this. themable?
 	return tabobj;
 }
 
+
+
 function show_tab(tabid){
 	$('#view > .viewtab').hide();
 	$('#view > '+tabid).show();
@@ -146,10 +148,11 @@ function volumen_list(gxml){
 
 function volumen_info(gxml){
 	//get theme file
-	$.get('themes/'+config_theme+'/volume_info.html', function (themehtml) {
+	$.get('themes/'+config_theme+'/volume_info.html', function (themehtmlorig) {
 		//parse every volume section
 		$(gxml).find('cliOutput > volInfo > volumes > volume').each(function(){
-
+			
+			var themehtml = themehtmlorig;
 			var volname = $(this).find('name').text()
 			var divguid = "volinfobox"+volname;	
 			//replace {VAR} with their value
@@ -161,6 +164,7 @@ function volumen_info(gxml){
 			// 2 = Rplicate
 			var volumetype = new Array();
 			volumetype[2] = "Replicate";
+			volumetype[0] = "Distribute"
 			//replace {TYPE} var with human readable info
 			themehtml = themehtml.replace("{TYPE}", volumetype[$(this).find('type').text()]);
 
@@ -170,7 +174,10 @@ function volumen_info(gxml){
 			var volumestatus = new Array();
 			volumestatus[1] = "Started";
 			volumestatus[2] = "Stopped";
+			volumestatus[0] = "Created";
 			themehtml = themehtml.replace("{STATUS}",volumestatus[ $(this).find('status').text() ]);
+			themehtml = themehtml.replace(/{MENUVOLNAME}/g, volname);
+
 
 			// Get html for one brick
 			var themehtmlbrick = $(themehtml).find(".bricklist").html()
@@ -185,14 +192,14 @@ function volumen_info(gxml){
 			var tabobj = add_tab("volumeinfo");
 			//insert html for volume
 			//$('#view').html(themehtml);
-			tabobj.html(themehtml);
+			tabobj.append(themehtml);
 			//insert html brick info for this volume. I dont like this, look later.
 			$("#tabvolumeinfo #"+divguid+" .bricklist").html(bricks);
 
 			//add events
 			$("#tabvolumeinfo #"+divguid+" .menu_volumen_stop").click(function(){
-				if (confirm("Sure?")) {
-					send_command("volume stop "+volname); //WARNING. WILL THIS WORK WITH MULTIPLE VOLUMES??
+				if (confirm("Stopping volume will make its data inaccessible. Do you want to continue?")) {
+					send_command("volume stop "+$(this).attr('href').replace("#","")); //WARNING. WILL THIS WORK WITH MULTIPLE VOLUMES??
 				}
 			});						
 
@@ -201,7 +208,7 @@ function volumen_info(gxml){
 			});
 
 			$("#tabvolumeinfo #"+divguid+" .option_log_rotate").click(function(){
-				send_command("volume log rotate gv0 "+$(this).attr('href').replace("#",""));//WARNING, BRICK CAN HAVE # IN THEIR NAME?
+				send_command("volume log rotate  "+volname+" "+$(this).attr('href').replace("#",""));//WARNING, BRICK CAN HAVE # IN THEIR NAME?
 			});
 		});
 	});
