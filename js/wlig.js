@@ -5,7 +5,7 @@ $(document).ready(function() {
 
 	//making tabs events
 	$(document).on('click', '.tabitem', function(){
-		show_tab($(this).attr('href'));
+		show_tab($(this).attr('href').replace("#",""));
 	});
 });
 
@@ -76,20 +76,22 @@ function add_tab(id){//LOOK if we can improve this. themable?
 	var tabid="tab"+id;
 	if ($("#view > #"+tabid).length > 0){
 		var tabobj = $("#view > #"+tabid);
-		show_tab("#"+tabid);
+		show_tab(tabid);
 	}else{
 		$("#view > #tabs").append("<li id=\"btab"+tabid+"\"><a href=\"#"+tabid+"\" class=\"tabitem\">"+tabid+"</a></li>");
 		var tabobj = $("#view").append("<div id=\""+tabid+"\" class=\"viewtab\"></div>").find("#"+tabid);
-		show_tab("#"+tabid);
+		show_tab(tabid);
 	}
 	return tabobj;
 }
 
-
+function clear_tab(tabid){
+	$('#view > #tab'+tabid).empty();
+}
 
 function show_tab(tabid){
 	$('#view > .viewtab').hide();
-	$('#view > '+tabid).show();
+	$('#view > #'+tabid).show();
 }
 
 function show_climsg(gxml){
@@ -149,6 +151,9 @@ function volumen_list(gxml){
 function volumen_info(gxml){
 	//get theme file
 	$.get('themes/'+config_theme+'/volume_info.html', function (themehtmlorig) {
+		
+		//clear content of tab. On a future improve this.
+		clear_tab("volumeinfo");
 		//parse every volume section
 		$(gxml).find('cliOutput > volInfo > volumes > volume').each(function(){
 			
