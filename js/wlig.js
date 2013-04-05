@@ -66,6 +66,11 @@ $('form#clicommand').submit(function() {
 	return false;
 });
 
+
+
+//**********************************
+// GUI Util functions
+//**********************************
 function printC(msg){
 	$('#console').append("<p>"+msg+"</p>");
 	$('#console').animate({ scrollTop: $('#console').get(0).scrollHeight}, 100);
@@ -117,6 +122,36 @@ function show_climsg(gxml){
 
 }
 
+function put_html_on_popup(thehtml){
+	$('#popup > $popupview').html(thehtml);
+}
+//*** End of GUI Util functions
+
+//**********************************
+// Theme functions
+//**********************************
+function get_theme_file(filename){
+	//I dont know how to do it better, but surely exists
+	var htmltoret="";
+	$.get('themes/'+config_theme+'/'+filename, function (themehtml) {
+		htmltoret=themehtml;
+	});
+	return htmltoret;
+}
+//*** End of Theme functions
+
+//**********************************
+// Popups and forms
+//**********************************
+function showform_addbrick(volname){
+	alert("no yet implemented");
+}
+
+//*** End of Popus
+
+//**********************************
+// Parse and show Responses
+//**********************************
 function volumen_start(gxml){
 	$(gxml).find('cliOutput > volStart').each(function(){
 		var volname = $(this).find('volname').text();
@@ -181,6 +216,9 @@ send_command("volume stop "+$(this).attr('href').replace("#",""));
 $('#tabvolumelist #volumelist .volumelistelement .volumelistmenu .volumelistmenugroup .opt_volumestart').click(function(){
 send_command("volume start "+$(this).attr('href').replace("#",""));
 }); 
+$('#tabvolumelist #volumelist .volumelistelement .volumelistmenu .volumelistmenugroup .opt_volumeaddbrick').click(function(){
+showform_addbrick($(this).attr('href').replace("#",""));
+});
 
 /*
 			<li class="volumelistmenuitem"><a href="#{VOLNAME}" class="opt_volumeinfo">Volume info</a></li>
@@ -190,11 +228,6 @@ send_command("volume start "+$(this).attr('href').replace("#",""));
                         <li class="volumelistmenuitem"><a href="#{VOLNAME}" class="opt_volumestart">Volume start</a></li>
 
 */
-
-
-
-	
-
 	});
 }
 
@@ -271,6 +304,9 @@ function volumen_info(gxml){
 
 function volumen_status(data){ 
 alert("vol status"); }
+//*** End of show and parse Responses
+
+
 
 //unused? remove?
 function guid(){

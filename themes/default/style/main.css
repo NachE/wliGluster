@@ -54,6 +54,15 @@ ul {
 	margin: 0px;
 }
 
+#popup{
+	display: none;
+	background-color: #ffffff;
+}
+
+#popup #popupview{
+	background-color: #ffffff;
+}
+
 #tabvolumeinfo .volumen{
 	float: left;
 	padding: 2px;

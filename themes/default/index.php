@@ -6,6 +6,7 @@
 </head>
 <body>
 <div id="wrapp">
+   <div id="popup"><div id="popupview"></div></div>
    <div id="view">
       <ul id="tabs"></ul>
    </div>
