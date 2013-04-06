@@ -132,11 +132,26 @@ function put_html_on_popup(thehtml){
 //**********************************
 function get_theme_file(filename){
 	//I dont know how to do it better, but surely exists
-	var htmltoret="";
-	$.get('themes/'+config_theme+'/'+filename, function (themehtml) {
+	var htmltoret;
+	$.ajax({
+		url: 'themes/'+config_theme+'/'+filename,
+		beforeSend: function ( xhr ) {
+			xhr.overrideMimeType("text/plain; charset=x-user-defined"); //the only way I found to ignore html web engine parser
+		},
+		async: false
+	}).done(function ( themehtml ) {
 		htmltoret=themehtml;
 	});
 	return htmltoret;
+}
+
+function nreplace(rep,thehtml){
+// I dont like loop, but...
+	for(key in rep) {
+		console.log("replacing "+key+" for "+rep[key])
+		thehtml = thehtml.replace( new RegExp(key, "g"),rep[key]);	
+	}
+	return thehtml;
 }
 //*** End of Theme functions
 
@@ -167,137 +182,135 @@ function volumen_stop(gxml){
 }
 
 function volumen_list(gxml){
-	$.get('themes/'+config_theme+'/volume_list.html', function (themehtml) {
-		//var onevolume = $(themehtml).find("#volumelist").html();
-		var onevolume = $(themehtml).html();
-		//alert(onevolume.html());
-		var volumelistshtml="";
-		$(gxml).find('cliOutput > volList > volume').each(function(){
-			volumelistshtml = volumelistshtml + onevolume.replace("{NAME}", $(this).text())
-						.replace("{VOLID}", "volid"+$(this).text())
-						.replace("{HREFNAME}", $(this).text())
-						.replace(/{VOLNAME}/g,$(this).text());
-		});
-		//adding ALL option that show all vols
-		volumelistshtml = volumelistshtml + onevolume.replace("{NAME}", "ALL")
-			.replace("{VOLID}", "all")
-			.replace("{HREFNAME}", "all")
-			.replace(/{VOLNAME}/g,"all");
 
-		//add new info tab
-		var tabobj = add_tab("volumelist");
-		//add html to tab
-		tabobj.html(themehtml);
-		//add the list of volumes to id=volumelist
-		$("#tabvolumelist #volumelist").html(volumelistshtml);
 
-		//adding events
-		$("#tabvolumelist #volumelist .volumelistelement .volumeonclick").click(function(){
-			var volume = $(this).attr('href').replace("#", "");//WARNING, CAN VOLUMES HAVE # IN THEIR NAMES?
-			send_command("volume info "+volume);
-		});
+	themehtml = get_theme_file('volume_list.html');
+	var volumelistshtml="";
+	$(gxml).find('cliOutput > volList > volume').each(function(){
+		//for each volume
+		var rep = {
+			"{NAME}": $(this).text(),
+			"{VOLID}": $(this).text(),
+			"{HREFNAME}": $(this).text(),
+			"{VOLNAME}": $(this).text()
+		};
+		volumelistshtml = volumelistshtml + nreplace(rep,themehtml);
+	});
+
+	var rep = {
+		"{NAME}": "ALL",
+		"{VOLID}": "all",
+		"{HREFNAME}": "all",
+		"{VOLNAME}": "all"
+	};
+	volumelistshtml = volumelistshtml + nreplace(rep,themehtml);
+
+	//add new info tab
+	var tabobj = add_tab("volumelist");
+	//add html to tab
+	tabobj.html(themehtml);
+	//add the list of volumes to id=volumelist
+	$("#tabvolumelist #volumelist").html(volumelistshtml);
+
+	//adding events
+	$("#tabvolumelist #volumelist .volumelistelement .volumeonclick").click(function(){
+		var volume = $(this).attr('href').replace("#", "");//WARNING, CAN VOLUMES HAVE # IN THEIR NAMES?
+		send_command("volume info "+volume);
+	});
 		
 //Maybe we need to make specific functions for each command to do not repeat things like confirmation on volume stop
-$('#tabvolumelist #volumelist .volumelistelement .volumelistmenu').click(function(){
-$(this).find('.volumelistmenugroup').toggle()
-});
-$('#tabvolumelist #volumelist .volumelistelement .volumelistmenu .volumelistmenugroup .opt_volumeinfo').click(function(){
-send_command("volume info "+$(this).attr('href').replace("#",""));
-});
-$('#tabvolumelist #volumelist .volumelistelement .volumelistmenu .volumelistmenugroup .opt_volumestatus').click(function(){
-send_command("volume status "+$(this).attr('href').replace("#",""));
-});
-$('#tabvolumelist #volumelist .volumelistelement .volumelistmenu .volumelistmenugroup .opt_volumestatusdetail').click(function(){
-send_command("volume status "+$(this).attr('href').replace("#","")+" detail");
-});
-$('#tabvolumelist #volumelist .volumelistelement .volumelistmenu .volumelistmenugroup .opt_volumestop').click(function(){
-send_command("volume stop "+$(this).attr('href').replace("#",""));
-});
-$('#tabvolumelist #volumelist .volumelistelement .volumelistmenu .volumelistmenugroup .opt_volumestart').click(function(){
-send_command("volume start "+$(this).attr('href').replace("#",""));
-}); 
-$('#tabvolumelist #volumelist .volumelistelement .volumelistmenu .volumelistmenugroup .opt_volumeaddbrick').click(function(){
-showform_addbrick($(this).attr('href').replace("#",""));
-});
-
-/*
-			<li class="volumelistmenuitem"><a href="#{VOLNAME}" class="opt_volumeinfo">Volume info</a></li>
-                        <li class="volumelistmenuitem"><a href="#{VOLNAME}" class="opt_volumestatus">Volume status</a></li>
-                        <li class="volumelistmenuitem"><a href="#{VOLNAME}" class="opt_volumestatusdetail">Volume status detail</a></li>
-                        <li class="volumelistmenuitem"><a href="#{VOLNAME}" class="opt_volumestop">Volume stop</a></li>
-                        <li class="volumelistmenuitem"><a href="#{VOLNAME}" class="opt_volumestart">Volume start</a></li>
-
-*/
+	$('#tabvolumelist #volumelist .volumelistelement .volumelistmenu').click(function(){
+		$(this).find('.volumelistmenugroup').toggle()
 	});
+	$('#tabvolumelist #volumelist .volumelistelement .volumelistmenu .volumelistmenugroup .opt_volumeinfo').click(function(){
+		send_command("volume info "+$(this).attr('href').replace("#",""));
+	});
+	$('#tabvolumelist #volumelist .volumelistelement .volumelistmenu .volumelistmenugroup .opt_volumestatus').click(function(){
+		send_command("volume status "+$(this).attr('href').replace("#",""));
+	});
+	$('#tabvolumelist #volumelist .volumelistelement .volumelistmenu .volumelistmenugroup .opt_volumestatusdetail').click(function(){
+		send_command("volume status "+$(this).attr('href').replace("#","")+" detail");
+	});
+	$('#tabvolumelist #volumelist .volumelistelement .volumelistmenu .volumelistmenugroup .opt_volumestop').click(function(){
+		send_command("volume stop "+$(this).attr('href').replace("#",""));
+	});
+	$('#tabvolumelist #volumelist .volumelistelement .volumelistmenu .volumelistmenugroup .opt_volumestart').click(function(){
+		send_command("volume start "+$(this).attr('href').replace("#",""));
+	});
+	$('#tabvolumelist #volumelist .volumelistelement .volumelistmenu .volumelistmenugroup .opt_volumeaddbrick').click(function(){
+		showform_addbrick($(this).attr('href').replace("#",""));
+	});
+
 }
 
 function volumen_info(gxml){
 	//get theme file
-	$.get('themes/'+config_theme+'/volume_info.html', function (themehtmlorig) {
+	themehtmlorig = get_theme_file('volume_info.html');
+	//clear content of tab. On a future improve this.
+	clear_tab("volumeinfo");
+	//parse every volume section
+	$(gxml).find('cliOutput > volInfo > volumes > volume').each(function(){
 		
-		//clear content of tab. On a future improve this.
-		clear_tab("volumeinfo");
-		//parse every volume section
-		$(gxml).find('cliOutput > volInfo > volumes > volume').each(function(){
-			
-			var themehtml = themehtmlorig;
-			var volname = $(this).find('name').text()
-			var divguid = "volinfobox"+volname;	
-			//replace {VAR} with their value
-			themehtml = themehtml.replace("{UID}", divguid );
-			themehtml = themehtml.replace("{NAME}", volname);
-			themehtml = themehtml.replace("{ID}", $(this).find('id').text());
+		var themehtml = themehtmlorig;
+		var volname = $(this).find('name').text()
+		var divguid = "volinfobox"+volname;
 
-			// Translate numeric values for Type of gluster
-			// 2 = Rplicate
-			var volumetype = new Array();
-			volumetype[2] = "Replicate";
-			volumetype[0] = "Distribute"
-			//replace {TYPE} var with human readable info
-			themehtml = themehtml.replace("{TYPE}", volumetype[$(this).find('type').text()]);
+		// Translate numeric values for Type of gluster
+		// 2 = Rplicate
+		var volumetype = new Array();
+		volumetype[2] = "Replicate";
+		volumetype[0] = "Distribute"
 
-			// Translate numeric status to human readable
-			// 1 = Started
-			// 0 = Stoped?
-			var volumestatus = new Array();
-			volumestatus[1] = "Started";
-			volumestatus[2] = "Stopped";
-			volumestatus[0] = "Created";
-			themehtml = themehtml.replace("{STATUS}",volumestatus[ $(this).find('status').text() ]);
-			themehtml = themehtml.replace(/{MENUVOLNAME}/g, volname);
+		// Translate numeric status to human readable
+		// 1 = Started
+		// 0 = Stoped?
+		var volumestatus = new Array();
+		volumestatus[1] = "Started";
+		volumestatus[2] = "Stopped";
+		volumestatus[0] = "Created";
 
+		//replace {VAR} with their value
+		var rep = {
+			"{UID}": divguid,
+			"{NAME}": volname,
+			"{ID}": $(this).find('id').text(),
+			"{TYPE}": volumetype[$(this).find('type').text()],
+			"{STATUS}": volumestatus[ $(this).find('status').text()],
+			"{MENUVOLNAME}": volname
+		};
 
-			// Get html for one brick
-			var themehtmlbrick = $(themehtml).find(".bricklist").html()
+		themehtml = nreplace(rep,themehtml);
 
-			// Loop to construct html for every brick
-			var bricks = "";
-			$(this).find('bricks > brick').each(function(){
-				bricks = bricks + themehtmlbrick.replace(/{BRICKNAME}/g, $(this).text());
-			});
+		// Get html for one brick
+		var themehtmlbrick = $(themehtml).find(".bricklist").html()
 
-			//add tab to view. id = tab+id_arg_passed
-			var tabobj = add_tab("volumeinfo");
-			//insert html for volume
-			//$('#view').html(themehtml);
-			tabobj.append(themehtml);
-			//insert html brick info for this volume. I dont like this, look later.
-			$("#tabvolumeinfo #"+divguid+" .bricklist").html(bricks);
+		// Loop to construct html for every brick
+		var bricks = "";
+		$(this).find('bricks > brick').each(function(){
+			bricks = bricks + nreplace({"{BRICKNAME}":$(this).text()}, themehtmlbrick);
+		});
 
-			//add events
-			$("#tabvolumeinfo #"+divguid+" .menu_volumen_stop").click(function(){
-				if (confirm("Stopping volume will make its data inaccessible. Do you want to continue?")) {
-					send_command("volume stop "+$(this).attr('href').replace("#","")); //WARNING. WILL THIS WORK WITH MULTIPLE VOLUMES??
-				}
-			});						
+		//add tab to view. id = tab+id_arg_passed
+		var tabobj = add_tab("volumeinfo");
+		//insert html for volume
+		//$('#view').html(themehtml);
+		tabobj.append(themehtml);
+		//insert html brick info for this volume. I dont like this, look later.
+		$("#tabvolumeinfo #"+divguid+" .bricklist").html(bricks);
 
-			$("#tabvolumeinfo #"+divguid+" .menu_volumen_start").click(function(){
-				send_command("volume start "+volname); //WARNING. WILL THIS WORK WITH MULTIPLE VOLUMES??
-			});
+		//add events
+		$("#tabvolumeinfo #"+divguid+" .menu_volumen_stop").click(function(){
+			if (confirm("Stopping volume will make its data inaccessible. Do you want to continue?")) {
+				send_command("volume stop "+$(this).attr('href').replace("#","")); //WARNING. WILL THIS WORK WITH MULTIPLE VOLUMES??
+			}
+		});						
 
-			$("#tabvolumeinfo #"+divguid+" .option_log_rotate").click(function(){
-				send_command("volume log rotate  "+volname+" "+$(this).attr('href').replace("#",""));//WARNING, BRICK CAN HAVE # IN THEIR NAME?
-			});
+		$("#tabvolumeinfo #"+divguid+" .menu_volumen_start").click(function(){
+			send_command("volume start "+volname); //WARNING. WILL THIS WORK WITH MULTIPLE VOLUMES??
+		});
+
+		$("#tabvolumeinfo #"+divguid+" .option_log_rotate").click(function(){
+			send_command("volume log rotate  "+volname+" "+$(this).attr('href').replace("#",""));//WARNING, BRICK CAN HAVE # IN THEIR NAME?
 		});
 	});
 }
