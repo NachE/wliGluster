@@ -11,6 +11,11 @@ $(document).ready(function() {
 	$(document).on('click', '.tabitem', function(){
 		show_tab($(this).attr('href').replace("#",""));
 	});
+
+	//making popup events
+	$('#popup #popupcontrol .close').click(function(){
+		$('#popup').hide();
+	});
 });
 
 $('form#clicommand').submit(function() {
