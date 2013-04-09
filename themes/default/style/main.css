@@ -57,6 +57,15 @@ ul {
 #popup{
 	display: none;
 	background-color: #ffffff;
+	box-shadow: 2px 4px 20px #005470;
+	-moz-box-shadow: 2px 4px 20px #005470;
+	-webkit-box-shadow: 2px 4px 20px #005470;
+	position: absolute;
+	z-index: 1000;
+	border: 1px solid #000000;
+	left: 27%;
+	top: 100px;
+	padding: 29px;
 }
 
 #popup #popupview{

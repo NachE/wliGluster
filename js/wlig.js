@@ -122,8 +122,14 @@ function show_climsg(gxml){
 
 }
 
+function put_file_on_popup(filename){
+	$('#popup > #popupview').html(get_theme_file(filename));
+	$('#popup').show();
+}
+
 function put_html_on_popup(thehtml){
 	$('#popup > $popupview').html(thehtml);
+	$('#popup').show();
 }
 //*** End of GUI Util functions
 
@@ -160,6 +166,7 @@ function nreplace(rep,thehtml){
 //**********************************
 function showform_addbrick(volname){
 	alert("no yet implemented");
+	put_file_on_popup('form_addbrick.html');
 }
 
 //*** End of Popus
