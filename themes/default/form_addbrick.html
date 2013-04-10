@@ -1,16 +1,17 @@
 <form id="addbrickform" clas="alignright" action="#" method="post">
+	<h2>Add a brick</h2>
 	<p>
-	<select name="stripereplica">
+	Type: <select name="type">
 		<option value=""></option>
 		<option value="stripe">Stripe</option>
 		<option value="replica">Replica</option>
+		
 	</select>
+	<label>Count: <input type="text" name="count" value="" size="5" /></label>
 	</p>
-	<p>
-	<label>Count: <input type="text" value="" /></label>
+	<p class="bricksinputsbox">
+	<label>Brick(s) Path(s): <input type="text" value="" name="brickpath" /></label>
 	</p>
-	<p>
-	<label>Brick Path: <input type="text" value="" name="brickpath" /></label>
-	</p>
+	<p class="formbuttons"><input type="submit" value="Ok, let's go" /></p>
 
 </form>

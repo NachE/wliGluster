@@ -19,7 +19,8 @@ $(document).ready(function() {
 });
 
 $('form#clicommand').submit(function() {
-	var command = $("input#inputtext").val();
+	var command = $("form#clicommand #inputtext").val();
+	$("form#clicommand #inputtext").val("");
 	printC(" ");
 	printC("[$] "+command);
 	if(command.length > 0){
@@ -66,8 +67,6 @@ $('form#clicommand').submit(function() {
 		.always(function() { printC("Done "+command);  });
 
 	}
-
-	$("input:first").val("");
 	return false;
 });
 
@@ -127,6 +126,14 @@ function show_climsg(gxml){
 
 }
 
+function close_popup(){
+	$('#popup').hide();
+}
+
+function open_popup(){
+	$('#popup').show();
+}
+
 function put_file_on_popup(filename){
 	$('#popup > #popupview').html(get_theme_file(filename));
 	$('#popup').show();
@@ -170,11 +177,49 @@ function nreplace(rep,thehtml){
 // Popups and forms
 //**********************************
 function showform_addbrick(volname){
-	alert("no yet implemented");
 	put_file_on_popup('form_addbrick.html');
+
+	//events
+	$("#addbrickform .bricksinputsbox input").focus(function(){
+		$(this).addClass('inputbricksfocused');
+	});
+	$("#addbrickform .bricksinputsbox input").focusout(function(){
+		 $(this).removeClass('inputbricksfocused');
+	});
+
+	$('form#addbrickform').submit(function(){
+
+		var ftype=String($('form#addbrickform select[name="type"] option:selected').val());
+		var fcount=String($('form#addbrickform input[name="count"]').val());
+		var fbrickpath=String($('form#addbrickform input[name="brickpath"]').val());
+
+		var options="";
+		if(ftype.length > 0 || fcount.length > 0){
+			if(fcount.length > 0 && ftype.length > 0){
+				options = options +" "+ftype+" "+fcount;
+			}else{
+				alert("Specify \"Type\" and \"Count\" or leave two options empty");
+				return false;
+			}
+		}
+
+		if(fbrickpath.length <= 0){
+			alert("Specify brick(s) path");
+			return false;
+		}
+		options = options+" "+fbrickpath
+		
+		var command ="volume add-brick "+volname+" "+options;
+		send_command(command);
+		close_popup();
+
+		//prevent page reload
+		return false;
+	});
+
 }
 
-//*** End of Popus
+//*** End fo Popups and forms
 
 //**********************************
 // Parse and show Responses
