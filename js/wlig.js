@@ -7,6 +7,7 @@ $(document).ready(function() {
 		printC("Auto init enabled, sending first command.");
 		send_command("volume list");
 	}
+
 	//making tabs events
 	$(document).on('click', '.tabitem', function(){
 		show_tab($(this).attr('href').replace("#",""));
@@ -39,6 +40,8 @@ $('form#clicommand').submit(function() {
 				var rawout = $(data).find('raw').text();
 				printC("Error num: "+errnum );
 				printC("Error command output: "+rawout);
+				alert_error(rawout);
+				console.log("Error: "+rawout);
 			}else{
 				//here we process data
 				$(data).find('cliOutput > volStatus').each(function(){
@@ -75,6 +78,10 @@ $('form#clicommand').submit(function() {
 //**********************************
 // GUI Util functions
 //**********************************
+function alert_error(msg){
+	alert("Error:\n\n"+msg);
+}
+
 function printC(msg){
 	$('#console').append("<p>"+msg+"</p>");
 	$('#console').animate({ scrollTop: $('#console').get(0).scrollHeight}, 100);
@@ -373,7 +380,7 @@ function volumen_info(gxml){
 }
 
 function volumen_status(data){ 
-alert("vol status"); }
+	alert("vol status not implemented yet"); }
 //*** End of show and parse Responses
 
 
