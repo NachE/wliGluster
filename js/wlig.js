@@ -1,8 +1,18 @@
 var config_theme = "default";
 var config_autoinit = true;
+Nstorage = new ntorage();
 
 $(document).ready(function() {
 	printC("Web Line Interface for Gluster");
+
+	//load theme files to free server load
+	printC("Loading interface...");
+	var themefiles = ["volume_info.html", "volume_list.html", "form_addbrick.html"];
+	for(var i in themefiles){
+		printC("Loading theme file "+themefiles[i]+"...");
+		get_theme_file(themefiles[i]);
+	}
+	
 	if(config_autoinit){
 		printC("Auto init enabled, sending first command.");
 		send_command("volume list");
@@ -155,18 +165,21 @@ function put_html_on_popup(thehtml){
 //**********************************
 // Theme functions
 //**********************************
+
 function get_theme_file(filename){
-	//I dont know how to do it better, but surely exists
-	var htmltoret;
-	$.ajax({
-		url: 'themes/'+config_theme+'/'+filename,
-		beforeSend: function ( xhr ) {
-			xhr.overrideMimeType("text/plain; charset=x-user-defined"); //the only way I found to ignore html web engine parser
-		},
-		async: false
-	}).done(function ( themehtml ) {
-		htmltoret=themehtml;
-	});
+	var htmltoret = Nstorage.getvar("themefile_" + filename);
+	if(htmltoret === null){
+		$.ajax({
+			url: 'themes/'+config_theme+'/'+filename,
+			beforeSend: function ( xhr ) {
+				xhr.overrideMimeType("text/plain; charset=x-user-defined"); //the only way I found to ignore html web engine parser
+			},
+			async: false
+		}).done(function ( themehtml ) {
+			htmltoret=themehtml;
+		});
+		Nstorage.setvar("themefile_" + filename, htmltoret);
+	}
 	return htmltoret;
 }
 
@@ -223,7 +236,6 @@ function showform_addbrick(volname){
 		//prevent page reload
 		return false;
 	});
-
 }
 
 //*** End fo Popups and forms
@@ -342,7 +354,6 @@ function volumen_info(gxml){
 			"{STATUS}": volumestatus[ $(this).find('status').text()],
 			"{MENUVOLNAME}": volname
 		};
-
 		themehtml = nreplace(rep,themehtml);
 
 		// Get html for one brick
@@ -382,7 +393,6 @@ function volumen_info(gxml){
 function volumen_status(data){ 
 	alert("vol status not implemented yet"); }
 //*** End of show and parse Responses
-
 
 
 //unused? remove?
