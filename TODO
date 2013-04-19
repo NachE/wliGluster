@@ -8,3 +8,12 @@
    Actually the gluster command can only executed by root. 
    We need to look for a solution to not chmod +S the 
    command or to not exec the server with root.
+
+* Improve the way of update information.
+   Now we rewrite all window content to show updated
+   data. This need to be improved making a easy way
+   to update data without rewriting all interface.
+   Maybe coding a widget lib?
+
+* Think if we have to separate the emergent menus and
+  their events from core and put it on the theme side.
