@@ -19,6 +19,10 @@
 
 var config_theme = "default";
 var config_autoinit = true;
+var config_server = ""; //Empty for single wligluster server
+// Sample:
+// var config_server = "http://somedomain.com/wliGluster/" //end with /
+var config_server_script = "glusterxml.php" //configure the server side interface
 Nstorage = new ntorage();
 
 $(document).ready(function() {
@@ -55,8 +59,8 @@ $('form#clicommand').submit(function() {
 	printC("[$] "+command);
 	if(command.length > 0){
 		printC("Ok, wait...");
-		console.log("sending: glusterxml.php?command="+command.replace(/ /g,"+"));
-		var jqxhr = $.get("glusterxml.php",{ command: command },  function() {
+		console.log("sending: "+config_server_script+"?command="+command.replace(/ /g,"+"));
+		var jqxhr = $.get(config_server + config_server_script,{ command: command },  function() {
 			//printC("Procesing response...");
 			console.log("Recived data from server, procesing...")
 		})
