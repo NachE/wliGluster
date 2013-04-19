@@ -1,0 +1,10 @@
+* Implement all commands from gluster to wliGluster GUI
+
+* Make the interface more user friendly
+
+* Make the code more scalable
+
+* See how to save the permissions problem
+   Actually the gluster command can only executed by root. 
+   We need to look for a solution to not chmod +S the 
+   command or to not exec the server with root.

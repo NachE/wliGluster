@@ -32,7 +32,7 @@ function ntorage () {
 		}
 	};
 	this.storagesupport = this.supports_html5_storage();
-	if(!this.storagesupport){alert("Your Web Browser does not support web storage. Maybe you get some troubles");}
+	if(!this.storagesupport){alert("Your Web Browser does not support web storage.\nMaybe you get some troubles.\nIt's recomended to use the latest version of modern web browser.");}
 
 	this.setvar = function(varname,value){
 		if(this.storagesupport){

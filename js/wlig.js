@@ -17,7 +17,6 @@
  *
  */
 
-
 var config_theme = "default";
 var config_autoinit = true;
 Nstorage = new ntorage();
@@ -40,7 +39,7 @@ $(document).ready(function() {
 
 	//making tabs events
 	$(document).on('click', '.tabitem', function(){
-		show_tab($(this).attr('href').replace("#",""));
+		return show_tab($(this).attr('href').replace("#",""));
 	});
 
 	//making popup events
@@ -147,7 +146,8 @@ function selected_tab(tabid){
 function show_tab(tabid){
 	$('#view > .viewtab').hide();
 	$('#view > #'+tabid).show();
-	 selected_tab(tabid);
+	selected_tab(tabid);
+	return false;
 }
 
 function show_climsg(gxml){
