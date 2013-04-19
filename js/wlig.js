@@ -316,6 +316,7 @@ function volumen_list(gxml){
 	$("#tabvolumelist #volumelist .volumelistelement .volumeonclick").click(function(){
 		var volume = $(this).attr('href').replace("#", "");//WARNING, CAN VOLUMES HAVE # IN THEIR NAMES?
 		send_command("volume info "+volume);
+		return false;
 	});
 		
 //Maybe we need to make specific functions for each command to do not repeat things like confirmation on volume stop
