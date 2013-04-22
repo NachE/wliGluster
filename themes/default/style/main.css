@@ -150,12 +150,21 @@ ul {
 	border: 1px solid #000000;
 }
 
-#tabvolumeinfo .volumen .volmenu{
+/*#tabvolumeinfo .volumen .volmenu{
 	cursor: pointer;
 	border: 4px outset;
 	padding: 2px;
+}*/
+
+
+.menufirstitem {
+	cursor: pointer;
+	margin-top: 10px;
+	background-color: #ffffff;
+	border: 1px solid #000000;
 }
-#tabvolumeinfo .volumen .volmenu .volmenuopts{
+
+.menufirstgroup {
 	display: none;
 	position: absolute;
 	background-color: #ffffff;
@@ -163,13 +172,13 @@ ul {
 	padding: 10px;
 }
 
-#tabvolumeinfo .volumen .volmenu .volmenuopts li a:link{
+.menufirstgroup li a:link{
 	padding: 4px;
 	display: block;
 }
 
-#tabvolumeinfo .volumen  .volmenu .volmenuopts li a:hover{
-	background-color: #999999;
+.menufirstgroup li a:hover{
+	background-color: #0f6;
 	color: #0000ff;
 }
 
@@ -206,27 +215,4 @@ ul {
 	box-shadow: 3px 6px 12px #aaaaaa;
 	-moz-box-shadow: 3px 6px 12px #aaaaaa;
 	-webkit-box-shadow: 3px 6px 12px #aaaaaa;
-}
-
-/*#view #tabvolumelist #volumelist .volumelistelement a{
-	display: block;
-	height: 59px;
-}*/
-
-#view #tabvolumelist #volumelist .volumelistelement a:hover{
-	background-color: #0f6;
-}
-
-#tabvolumelist #volumelist .volumelistelement .volumelistmenu{
-	cursor: pointer;
-	margin-top: 10px;
-	background-color: #ffffff;
-	border: 1px solid #000000;
-}
-#tabvolumelist #volumelist .volumelistelement .volumelistmenu .volumelistmenugroup{
-	position: absolute;
-	display: none;
-	background-color: #ffffff;
-	border: 1px solid #000000;
-	padding: 10px;
 }

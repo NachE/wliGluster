@@ -50,6 +50,11 @@ $(document).ready(function() {
 	$('#popup #popupcontrol .close').click(function(){
 		$('#popup').hide();
 	});
+
+	//making menu events
+	$(document).on('click', '.menufirstitem', function(){
+		$(this).find('.menufirstgroup').toggle();
+	});
 });
 
 $('form#clicommand').submit(function() {
@@ -164,7 +169,6 @@ function show_climsg(gxml){
 	}else{
 		printC("Info: "+$(gxml).find('cliOutput > output').text());
 	}
-
 }
 
 function close_popup(){
@@ -320,9 +324,9 @@ function volumen_list(gxml){
 	});
 		
 //Maybe we need to make specific functions for each command to do not repeat things like confirmation on volume stop
-	$('#tabvolumelist #volumelist .volumelistelement .volumelistmenu').click(function(){
-		$(this).find('.volumelistmenugroup').toggle()
-	});
+//	$('#tabvolumelist #volumelist .volumelistelement .volumelistmenu').click(function(){
+//		$(this).find('.volumelistmenugroup').toggle();
+//	});
 	$('#tabvolumelist #volumelist .volumelistelement .volumelistmenu .volumelistmenugroup .opt_volumeinfo').click(function(){
 		send_command("volume info "+$(this).attr('href').replace("#",""));
 	});
