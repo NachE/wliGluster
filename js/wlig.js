@@ -30,7 +30,7 @@ $(document).ready(function() {
 
 	//load theme files to free server load
 	printC("Loading interface...");
-	var themefiles = ["volume_info.html", "volume_list.html", "form_addbrick.html"];
+	var themefiles = ["volume_info.html", "volume_list.html", "form_addbrick.html", "form_config_wligluster.html"];
 	for(var i in themefiles){
 		printC("Loading theme file "+themefiles[i]+"...");
 		get_theme_file(themefiles[i]);
