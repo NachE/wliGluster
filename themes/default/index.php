@@ -14,7 +14,9 @@
       <ul>
          <li class="menufirstitem">Config
             <ul class="menufirstgroup">
-               <li><a href="#config_wligluster">Server Address</a></li>
+               <li><a href="#config_wligluster">General Config</a></li>
+               <li><a href="#config_wligluster_export">Export Config</a></li>
+               <li><a href="#config_wligluster_import">Import Config</a></li>
             </ul>
          </li>
       </ul>
