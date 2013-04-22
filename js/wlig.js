@@ -17,13 +17,15 @@
  *
  */
 
-var config_theme = "default";
-var config_autoinit = true;
-var config_server = ""; //Empty for single wligluster server
-// Sample:
-// var config_server = "http://somedomain.com/wliGluster/" //end with /
-var config_server_script = "glusterxml.php" //configure the server side interface
 Nstorage = new ntorage();
+Nconfig = new nconfig();
+
+Nconfig.set("config_theme", "default");
+Nconfig.set("config_autoinit", true);
+Nconfig.set("config_server", "");
+// Sample:
+// // var config_server = "http://somedomain.com/wliGluster/" //end with /
+Nconfig.set("config_server_script", "glusterxml.php"); //configure the server side interface
 
 $(document).ready(function() {
 	printC("Web Line Interface for Gluster");
@@ -36,7 +38,7 @@ $(document).ready(function() {
 		get_theme_file(themefiles[i]);
 	}
 	
-	if(config_autoinit){
+	if(Nconfig.get("config_autoinit")){
 		printC("Auto init enabled, sending first command.");
 		send_command("volume list");
 	}
@@ -69,8 +71,8 @@ $('form#clicommand').submit(function() {
 	printC("[$] "+command);
 	if(command.length > 0){
 		printC("Ok, wait...");
-		console.log("sending: "+config_server_script+"?command="+command.replace(/ /g,"+"));
-		var jqxhr = $.get(config_server + config_server_script,{ command: command },  function() {
+		console.log("sending: "+Nconfig.get("config_server_script")+"?command="+command.replace(/ /g,"+"));
+		var jqxhr = $.get(Nconfig.get("config_server") + Nconfig.get("config_server_script"),{ command: command },  function() {
 			//printC("Procesing response...");
 			console.log("Recived data from server, procesing...")
 		})
@@ -203,7 +205,7 @@ function get_theme_file(filename){
 	var htmltoret = Nstorage.getvar("themefile_" + filename);
 	if(htmltoret === null){
 		$.ajax({
-			url: 'themes/'+config_theme+'/'+filename,
+			url: 'themes/'+Nconfig.get("config_theme")+'/'+filename,
 			beforeSend: function ( xhr ) {
 				xhr.overrideMimeType("text/plain; charset=x-user-defined"); //the only way I found to ignore html web engine parser
 			},
@@ -232,12 +234,12 @@ function nreplace(rep,thehtml){
 function showform_config_wligluster(){
 	put_file_on_popup('form_config_wligluster.html');
 
-	$('form#config_wligluster input[name="config_server_address"]').val(config_server);
-	$('form#config_wligluster input[name="config_server_script"]').val(config_server_script);
+	$('form#config_wligluster input[name="config_server_address"]').val(Nconfig.get("config_server"));
+	$('form#config_wligluster input[name="config_server_script"]').val(Nconfig.get("config_server_script"));
 
 	$('form#config_wligluster').submit(function(){
-		config_server = String($('form#config_wligluster input[name="config_server_address"]').val());
-		config_server_script = String($('form#config_wligluster input[name="config_server_script"]').val());
+		Nconfig.set("config_server", String($('form#config_wligluster input[name="config_server_address"]').val()));
+		Nconfig.set("config_server_script", String($('form#config_wligluster input[name="config_server_script"]').val()));
 		close_popup();
 		return false;
 	});

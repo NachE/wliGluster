@@ -33,6 +33,7 @@
 <script type="text/javascript" src="js/jquery.js"></script>
 <script type="text/javascript" src="<?php echo "themes/".$config_theme."/";?>js/style.js"></script>
 <script type="text/javascript" src="js/wliglibs/nstorage.js"></script>
+<script type="text/javascript" src="js/wliglibs/nconfig.js"></script>
 <script type="text/javascript" src="js/wlig.js"></script>
 </body>
 </html>
