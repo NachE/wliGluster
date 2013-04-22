@@ -10,6 +10,15 @@
       <div id="popupcontrol"><p class="close">Close</p></div>
       <div id="popupview"></div>
    </div>
+   <div id="config">
+      <ul>
+         <li class="menufirstitem">Config
+            <ul class="menufirstgroup">
+               <li><a href="#config_wligluster">Server Address</a></li>
+            </ul>
+         </li>
+      </ul>
+   </div>
    <div id="view">
       <ul id="tabs"></ul>
    </div>

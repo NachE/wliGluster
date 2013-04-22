@@ -55,6 +55,11 @@ $(document).ready(function() {
 	$(document).on('click', '.menufirstitem', function(){
 		$(this).find('.menufirstgroup').toggle();
 	});
+
+	//events for config menu
+	$(document).on('click', '#config a[href="#config_wligluster"]', function(){
+		showform_config_wligluster();
+	});
 });
 
 $('form#clicommand').submit(function() {
@@ -224,6 +229,20 @@ function nreplace(rep,thehtml){
 //**********************************
 // Popups and forms
 //**********************************
+function showform_config_wligluster(){
+	put_file_on_popup('form_config_wligluster.html');
+
+	$('form#config_wligluster input[name="config_server_address"]').val(config_server);
+	$('form#config_wligluster input[name="config_server_script"]').val(config_server_script);
+
+	$('form#config_wligluster').submit(function(){
+		config_server = String($('form#config_wligluster input[name="config_server_address"]').val());
+		config_server_script = String($('form#config_wligluster input[name="config_server_script"]').val());
+		close_popup();
+		return false;
+	});
+}
+
 function showform_addbrick(volname){
 	put_file_on_popup('form_addbrick.html');
 
@@ -286,8 +305,6 @@ function volumen_stop(gxml){
 }
 
 function volumen_list(gxml){
-
-
 	themehtml = get_theme_file('volume_list.html');
 	var volumelistshtml="";
 	$(gxml).find('cliOutput > volList > volume').each(function(){
@@ -323,26 +340,23 @@ function volumen_list(gxml){
 		return false;
 	});
 		
-//Maybe we need to make specific functions for each command to do not repeat things like confirmation on volume stop
-//	$('#tabvolumelist #volumelist .volumelistelement .volumelistmenu').click(function(){
-//		$(this).find('.volumelistmenugroup').toggle();
-//	});
-	$('#tabvolumelist #volumelist .volumelistelement .volumelistmenu .volumelistmenugroup .opt_volumeinfo').click(function(){
+	//Maybe we need to make specific functions for each command to do not repeat things like confirmation on volume stop
+	$('#tabvolumelist #volumelist .volumelistelement .volumelistmenu .opt_volumeinfo').click(function(){
 		send_command("volume info "+$(this).attr('href').replace("#",""));
 	});
-	$('#tabvolumelist #volumelist .volumelistelement .volumelistmenu .volumelistmenugroup .opt_volumestatus').click(function(){
+	$('#tabvolumelist #volumelist .volumelistelement .volumelistmenu .opt_volumestatus').click(function(){
 		send_command("volume status "+$(this).attr('href').replace("#",""));
 	});
-	$('#tabvolumelist #volumelist .volumelistelement .volumelistmenu .volumelistmenugroup .opt_volumestatusdetail').click(function(){
+	$('#tabvolumelist #volumelist .volumelistelement .volumelistmenu .opt_volumestatusdetail').click(function(){
 		send_command("volume status "+$(this).attr('href').replace("#","")+" detail");
 	});
-	$('#tabvolumelist #volumelist .volumelistelement .volumelistmenu .volumelistmenugroup .opt_volumestop').click(function(){
+	$('#tabvolumelist #volumelist .volumelistelement .volumelistmenu .opt_volumestop').click(function(){
 		send_command("volume stop "+$(this).attr('href').replace("#",""));
 	});
-	$('#tabvolumelist #volumelist .volumelistelement .volumelistmenu .volumelistmenugroup .opt_volumestart').click(function(){
+	$('#tabvolumelist #volumelist .volumelistelement .volumelistmenu .opt_volumestart').click(function(){
 		send_command("volume start "+$(this).attr('href').replace("#",""));
 	});
-	$('#tabvolumelist #volumelist .volumelistelement .volumelistmenu .volumelistmenugroup .opt_volumeaddbrick').click(function(){
+	$('#tabvolumelist #volumelist .volumelistelement .volumelistmenu .opt_volumeaddbrick').click(function(){
 		showform_addbrick($(this).attr('href').replace("#",""));
 	});
 
