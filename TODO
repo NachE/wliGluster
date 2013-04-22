@@ -1,5 +1,9 @@
 * Implement all commands from gluster to wliGluster GUI
 
+* Implement config abstraction using local storage or session storage
+   And see if we can export this config to a file and 
+   load configs from file.
+
 * Make the interface more user friendly
 
 * Make the code more scalable
