@@ -33,12 +33,13 @@ function nconfig () {
 	};
 
 	this.export = function(){
-		//not implemented
+		location.href="data:application/octet-stream;base64,"+base64_encode(JSON.stringify(this.Nstorage.getall("_nconfig_")));
 		return false;
 	};
 
 	this.import = function(data){
 		//not implemented
+		//JSON.parse( serialized object );
 		return false;
 	};
 }

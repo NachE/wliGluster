@@ -55,4 +55,27 @@ function ntorage () {
 		}
 	};
 
+	this.getall = function(filter){
+		filter = typeof filter !== 'undefined' ? filter : String("");
+		if(this.storagesupport){
+			var toret = {};
+			if (filter.length > 0) {
+				for (i=0;i < sessionStorage.length;i++) {
+					var key = sessionStorage.key(i);
+					if (key.indexOf(filter) >= 0){
+						toret[key] = sessionStorage.getItem(key);
+					}
+				}
+			}else{
+				for (i=0;i < sessionStorage.length;i++) {
+					var key = sessionStorage.key(i);
+					toret[key] = sessionStorage.getItem(key);
+				}
+			}
+			return toret;
+		}else{
+			return this.badstorage;
+		}
+	};
+
 }
