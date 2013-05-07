@@ -23,16 +23,20 @@ Nconfig = new nconfig();
 Nconfig.set("config_theme", "default");
 Nconfig.set("config_autoinit", true);
 Nconfig.set("config_server", "");
-// Sample:
-// // var config_server = "http://somedomain.com/wliGluster/" //end with /
-Nconfig.set("config_server_script", "glusterxml.php"); //configure the server side interface
+//configure the server side interface
+Nconfig.set("config_server_script", "glusterxml.php"); 
 
 $(document).ready(function() {
 	printC("Web Line Interface for Gluster");
 
 	//load theme files to free server load
 	printC("Loading interface...");
-	var themefiles = ["volume_info.html", "volume_list.html", "form_addbrick.html", "form_config_wligluster.html"];
+	var themefiles = 
+		["volume_info.html",
+		"volume_list.html",
+		"form_addbrick.html",
+		"form_config_wligluster.html"];
+
 	for(var i in themefiles){
 		printC("Loading theme file "+themefiles[i]+"...");
 		get_theme_file(themefiles[i]);
@@ -44,23 +48,33 @@ $(document).ready(function() {
 	}
 
 	//making tabs events
-	$(document).on('click', '.tabitem', function(){
+	$(document).on('click', '.tabitem', 
+	function(){
 		return show_tab($(this).attr('href').replace("#",""));
 	});
 
 	//making popup events
-	$('#popup #popupcontrol .close').click(function(){
+	$('#popup #popupcontrol .close').click(
+	function(){
 		$('#popup').hide();
 	});
 
 	//making menu events
-	$(document).on('click', '.menufirstitem', function(){
+	$(document).on('click', '.menufirstitem', 
+	function(){
 		$(this).find('.menufirstgroup').toggle();
 	});
 
 	//events for config menu
-	$(document).on('click', '#config a[href="#config_wligluster"]', function(){
+	$(document).on('click', '#config a[href="#config_wligluster"]', 
+	function(){
 		showform_config_wligluster();
+	});
+
+	$(document).on('click', '#config a[href="#config_wligluster_export"]',
+	function(){
+		Nconfig.export();
+		return false;
 	});
 });
 
@@ -69,11 +83,19 @@ $('form#clicommand').submit(function() {
 	$("form#clicommand #inputtext").val("");
 	printC(" ");
 	printC("[$] "+command);
-	if(command.length > 0){
+	if(command.length > 0)
+	{
+	
 		printC("Ok, wait...");
-		console.log("sending: "+Nconfig.get("config_server_script")+"?command="+command.replace(/ /g,"+"));
-		var jqxhr = $.get(Nconfig.get("config_server") + Nconfig.get("config_server_script"),{ command: command },  function() {
-			//printC("Procesing response...");
+		console.log("sending: "+
+			Nconfig.get("config_server_script")+
+			"?command="+command.replace(/ /g,"+"));
+
+		var jqxhr = $.get(Nconfig.get("config_server")+ 
+		Nconfig.get("config_server_script"),
+		{ command: command },
+		function(){
+
 			console.log("Recived data from server, procesing...")
 		})
 		.done(function(data) 
@@ -89,22 +111,28 @@ $('form#clicommand').submit(function() {
 				console.log("Error: "+rawout);
 			}else{
 				//here we process data
-				$(data).find('cliOutput > volStatus').each(function(){
+				$(data).find('cliOutput > volStatus').each(
+				function(){
 					volumen_status(data); });
 				
-				$(data).find('cliOutput > volInfo').each(function(){
+				$(data).find('cliOutput > volInfo').each(
+				function(){
 					volumen_info(data); });
 
-				$(data).find('cliOutput > volList').each(function(){
+				$(data).find('cliOutput > volList').each(
+				function(){
 					volumen_list(data); });
 
-				$(data).find('cliOutput > volStart').each(function(){
+				$(data).find('cliOutput > volStart').each(
+				function(){
 					volumen_start(data); });
 
-				$(data).find('cliOutput > volStop').each(function(){
+				$(data).find('cliOutput > volStop').each(
+				function(){
 					volumen_stop(data); });
 
-				$(data).find('cliOutput > cliOp').each(function(){
+				$(data).find('cliOutput > cliOp').each(
+				function(){
 					show_climsg(data);	
 				});
 			}
@@ -113,7 +141,6 @@ $('form#clicommand').submit(function() {
 			printC("[!] ERROR ON THE WLIGLUSTER SERVER SIDE!");
 		 })
 		.always(function() { printC("Done "+command);  });
-
 	}
 	return false;
 });
@@ -143,8 +170,13 @@ function add_tab(id){//LOOK if we can improve this. themable?
 		var tabobj = $("#view > #"+tabid);
 		show_tab(tabid);
 	}else{
-		$("#view > #tabs").append("<li id=\"btab"+tabid+"\"><a href=\"#"+tabid+"\" class=\"tabitem\">"+tabid+"</a></li>");
-		var tabobj = $("#view").append("<div id=\""+tabid+"\" class=\"viewtab\"></div>").find("#"+tabid);
+		$("#view > #tabs").append("<li "+
+			"id=\"btab"+tabid+"\"><a href=\"#"+tabid+"\" "+
+			"class=\"tabitem\">"+tabid+"</a></li>");
+
+		var tabobj = $("#view").append("<div "+
+			"id=\""+tabid+"\" class=\"viewtab\">"+
+			"</div>").find("#"+tabid);
 		show_tab(tabid);
 	}
 	return tabobj;
@@ -207,7 +239,8 @@ function get_theme_file(filename){
 		$.ajax({
 			url: 'themes/'+Nconfig.get("config_theme")+'/'+filename,
 			beforeSend: function ( xhr ) {
-				xhr.overrideMimeType("text/plain; charset=x-user-defined"); //the only way I found to ignore html web engine parser
+				//the only way I found to ignore html web engine parser
+				xhr.overrideMimeType("text/plain; charset=x-user-defined"); 
 			},
 			async: false
 		}).done(function ( themehtml ) {
@@ -234,12 +267,28 @@ function nreplace(rep,thehtml){
 function showform_config_wligluster(){
 	put_file_on_popup('form_config_wligluster.html');
 
-	$('form#config_wligluster input[name="config_server_address"]').val(Nconfig.get("config_server"));
-	$('form#config_wligluster input[name="config_server_script"]').val(Nconfig.get("config_server_script"));
+	$('form#config_wligluster '+
+	'input[name="config_server_address"]').val(Nconfig.get("config_server"));
+
+	$('form#config_wligluster '+
+	'input[name="config_server_script"]').val(Nconfig.get("config_server_script"));
 
 	$('form#config_wligluster').submit(function(){
-		Nconfig.set("config_server", String($('form#config_wligluster input[name="config_server_address"]').val()));
-		Nconfig.set("config_server_script", String($('form#config_wligluster input[name="config_server_script"]').val()));
+		Nconfig.set(
+			"config_server", 
+			String(
+				$('form#config_wligluster '+
+				'input[name="config_server_address"]').val() 
+			)
+		);
+
+		Nconfig.set(
+			"config_server_script", 
+			String(
+				$('form#config_wligluster '+
+				'input[name="config_server_script"]').val()
+			)
+		);
 		close_popup();
 		return false;
 	});
@@ -258,7 +307,9 @@ function showform_addbrick(volname){
 
 	$('form#addbrickform').submit(function(){
 
-		var ftype=String($('form#addbrickform select[name="type"] option:selected').val());
+		var ftype=String($('form#addbrickform '+
+				'select[name="type"] option:selected').val());
+
 		var fcount=String($('form#addbrickform input[name="count"]').val());
 		var fbrickpath=String($('form#addbrickform input[name="brickpath"]').val());
 
@@ -267,7 +318,8 @@ function showform_addbrick(volname){
 			if(fcount.length > 0 && ftype.length > 0){
 				options = options +" "+ftype+" "+fcount;
 			}else{
-				alert("Specify \"Type\" and \"Count\" or leave two options empty");
+				alert("Specify \"Type\" and \"Count\" "+
+						"or leave two options empty");
 				return false;
 			}
 		}
@@ -336,32 +388,51 @@ function volumen_list(gxml){
 	$("#tabvolumelist #volumelist").html(volumelistshtml);
 
 	//adding events
-	$("#tabvolumelist #volumelist .volumelistelement .volumeonclick").click(function(){
-		var volume = $(this).attr('href').replace("#", "");//WARNING, CAN VOLUMES HAVE # IN THEIR NAMES?
+	$('#tabvolumelist #volumelist .volumelistelement '+
+	'.volumeonclick').click(function(){
+		//WARNING, CAN VOLUMES HAVE # IN THEIR NAMES?
+		var volume = $(this).attr('href').replace("#", "");
 		send_command("volume info "+volume);
 		return false;
 	});
 		
-	//Maybe we need to make specific functions for each command to do not repeat things like confirmation on volume stop
-	$('#tabvolumelist #volumelist .volumelistelement .volumelistmenu .opt_volumeinfo').click(function(){
-		send_command("volume info "+$(this).attr('href').replace("#",""));
+	//Maybe we need to make specific functions for each 
+	//command to do not repeat things like confirmation 
+	//on volume stop
+	$('#tabvolumelist #volumelist .volumelistelement '+
+	'.volumelistmenu .opt_volumeinfo').click(function(){
+		send_command("volume info "
+			+$(this).attr('href').replace("#",""));
 	});
-	$('#tabvolumelist #volumelist .volumelistelement .volumelistmenu .opt_volumestatus').click(function(){
-		send_command("volume status "+$(this).attr('href').replace("#",""));
-	});
-	$('#tabvolumelist #volumelist .volumelistelement .volumelistmenu .opt_volumestatusdetail').click(function(){
-		send_command("volume status "+$(this).attr('href').replace("#","")+" detail");
-	});
-	$('#tabvolumelist #volumelist .volumelistelement .volumelistmenu .opt_volumestop').click(function(){
-		send_command("volume stop "+$(this).attr('href').replace("#",""));
-	});
-	$('#tabvolumelist #volumelist .volumelistelement .volumelistmenu .opt_volumestart').click(function(){
-		send_command("volume start "+$(this).attr('href').replace("#",""));
-	});
-	$('#tabvolumelist #volumelist .volumelistelement .volumelistmenu .opt_volumeaddbrick').click(function(){
-		showform_addbrick($(this).attr('href').replace("#",""));
+	
+	$('#tabvolumelist #volumelist .volumelistelement '+
+	'.volumelistmenu .opt_volumestatus').click(function(){
+		send_command("volume status "
+			+$(this).attr('href').replace("#",""));
 	});
 
+	$('#tabvolumelist #volumelist .volumelistelement '+
+	'.volumelistmenu .opt_volumestatusdetail').click(function(){
+		send_command("volume status "
+			+$(this).attr('href').replace("#","")+" detail");
+	});
+
+	$('#tabvolumelist #volumelist .volumelistelement '+
+	'.volumelistmenu .opt_volumestop').click(function(){
+		send_command("volume stop "
+			+$(this).attr('href').replace("#",""));
+	});
+
+	$('#tabvolumelist #volumelist .volumelistelement '+
+	'.volumelistmenu .opt_volumestart').click(function(){
+		send_command("volume start "
+			+$(this).attr('href').replace("#",""));
+	});
+
+	$('#tabvolumelist #volumelist .volumelistelement '+
+	'.volumelistmenu .opt_volumeaddbrick').click(function(){
+		showform_addbrick($(this).attr('href').replace("#",""));
+	});
 }
 
 function volumen_info(gxml){
@@ -390,16 +461,17 @@ function volumen_info(gxml){
 		volumestatus[2] = "Stopped";
 		volumestatus[0] = "Created";
 
-		//replace {VAR} with their value
-		var rep = {
-			"{UID}": divguid,
-			"{NAME}": volname,
-			"{ID}": $(this).find('id').text(),
-			"{TYPE}": volumetype[$(this).find('type').text()],
-			"{STATUS}": volumestatus[ $(this).find('status').text()],
-			"{MENUVOLNAME}": volname
-		};
-		themehtml = nreplace(rep,themehtml);
+		themehtml = 
+			nreplace(
+				{
+				"{UID}": divguid,
+				"{NAME}": volname,
+				"{ID}": $(this).find('id').text(),
+				"{TYPE}": volumetype[$(this).find('type').text()],
+				"{STATUS}": volumestatus[ $(this).find('status').text()],
+				"{MENUVOLNAME}": volname
+				},
+			themehtml );
 
 		// Get html for one brick
 		var themehtmlbrick = $(themehtml).find(".bricklist").html()
@@ -407,30 +479,37 @@ function volumen_info(gxml){
 		// Loop to construct html for every brick
 		var bricks = "";
 		$(this).find('bricks > brick').each(function(){
-			bricks = bricks + nreplace({"{BRICKNAME}":$(this).text()}, themehtmlbrick);
+			bricks = bricks +
+					nreplace(
+						{ "{BRICKNAME}":$(this).text() }, 
+						themehtmlbrick
+					);
 		});
 
 		//add tab to view. id = tab+id_arg_passed
 		var tabobj = add_tab("volumeinfo");
-		//insert html for volume
-		//$('#view').html(themehtml);
-		tabobj.append(themehtml);
+		tabobj.append(themehtml); //insert html for volume
 		//insert html brick info for this volume. I dont like this, look later.
 		$("#tabvolumeinfo #"+divguid+" .bricklist").html(bricks);
 
 		//add events
 		$("#tabvolumeinfo #"+divguid+" .menu_volumen_stop").click(function(){
-			if (confirm("Stopping volume will make its data inaccessible. Do you want to continue?")) {
-				send_command("volume stop "+$(this).attr('href').replace("#","")); //WARNING. WILL THIS WORK WITH MULTIPLE VOLUMES??
+			if (confirm("Stopping volume will make its data inaccessible."+
+					" Do you want to continue?"))
+			{
+				send_command("volume stop "+
+					$(this).attr('href').replace("#",""));
 			}
 		});						
 
 		$("#tabvolumeinfo #"+divguid+" .menu_volumen_start").click(function(){
-			send_command("volume start "+volname); //WARNING. WILL THIS WORK WITH MULTIPLE VOLUMES??
+			send_command("volume start "+volname);
 		});
 
 		$("#tabvolumeinfo #"+divguid+" .option_log_rotate").click(function(){
-			send_command("volume log rotate  "+volname+" "+$(this).attr('href').replace("#",""));//WARNING, BRICK CAN HAVE # IN THEIR NAME?
+			send_command("volume log rotate  "+volname+" "+
+				$(this).attr('href').replace("#",""));
+			//WARNING, BRICK CAN HAVE # IN THEIR NAME?
 		});
 	});
 }
@@ -439,8 +518,3 @@ function volumen_status(data){
 	alert("vol status not implemented yet"); }
 //*** End of show and parse Responses
 
-
-//unused? remove?
-function guid(){
-	return ((new Date()).getTime()).toString() + (  Math.round( (1 + Math.random()) * 0x10000 )    ).toString();
-}
