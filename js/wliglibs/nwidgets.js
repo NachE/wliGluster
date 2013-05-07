@@ -18,28 +18,19 @@
  */
 
 
-//uses ntorage lib
-
-function Nconfig () {
-
-	this.nstorage = new Nstorage();
-
-	this.set = function (param, value){
-		return this.nstorage.setvar("_nconfig_"+param, value);
-	};
-
-	this.get = function (param){
-		return this.nstorage.getvar("_nconfig_"+param);
-	};
-
-	this.export = function(){
-		location.href="data:application/octet-stream;base64,"+base64_encode(JSON.stringify(this.nstorage.getall("_nconfig_")));
-		return false;
-	};
-
-	this.import = function(data){
-		//not implemented
-		//JSON.parse( serialized object );
-		return false;
-	};
+function Nwidget(){
+	this.getid = function(){
+		alert("im a function on nwidget");
+	}
 }
+
+function Button(){
+	Nwidget.call(this);
+	this.getid = function(){
+		alert("sobrescribed");
+	}
+}
+
+
+button = new Button();
+button.getid();

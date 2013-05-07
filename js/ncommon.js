@@ -17,29 +17,19 @@
  *
  */
 
-
-//uses ntorage lib
-
-function Nconfig () {
-
-	this.nstorage = new Nstorage();
-
-	this.set = function (param, value){
-		return this.nstorage.setvar("_nconfig_"+param, value);
-	};
-
-	this.get = function (param){
-		return this.nstorage.getvar("_nconfig_"+param);
-	};
-
-	this.export = function(){
-		location.href="data:application/octet-stream;base64,"+base64_encode(JSON.stringify(this.nstorage.getall("_nconfig_")));
-		return false;
-	};
-
-	this.import = function(data){
-		//not implemented
-		//JSON.parse( serialized object );
-		return false;
-	};
+function includeScript(scriptPath){
+	var body = document.getElementsByTagName('body')[0];
+	var script= document.createElement('script');
+	script.type= 'text/javascript';
+	script.src= scriptPath;
+	body.appendChild(script);
 }
+
+includeScript("js/jquery.js");
+includeScript("js/extra.js");
+includeScript("js/wliglibs/nstorage.js");
+includeScript("js/wliglibs/nconfig.js");
+includeScript("js/wliglibs/nconector.js");
+includeScript("js/wliglibs/nwidgets.js");
+includeScript("js/wlig.js");
+

@@ -18,28 +18,23 @@
  */
 
 
-//uses ntorage lib
+function Nconector(){
+	this.get_widget_file = function(filename){
+		var htmltoret = Nstorage.getvar("widgetfile_" + filename);
+		if(htmltoret === null){
+			$.ajax({
+				url: 'themes/'+Nconfig.get("config_theme")+'/nwidgets/'+filename,
+				beforeSend: function ( xhr ) {
+                                //prevent browser engine to parse content
+                                	xhr.overrideMimeType("text/plain; charset=x-user-defined");
+				},
+				async: false
+			}).done(function ( themehtml ) {
+				htmltoret=themehtml;
+			});
 
-function Nconfig () {
-
-	this.nstorage = new Nstorage();
-
-	this.set = function (param, value){
-		return this.nstorage.setvar("_nconfig_"+param, value);
-	};
-
-	this.get = function (param){
-		return this.nstorage.getvar("_nconfig_"+param);
-	};
-
-	this.export = function(){
-		location.href="data:application/octet-stream;base64,"+base64_encode(JSON.stringify(this.nstorage.getall("_nconfig_")));
-		return false;
-	};
-
-	this.import = function(data){
-		//not implemented
-		//JSON.parse( serialized object );
-		return false;
-	};
+			Nstorage.setvar("widgetfile_" + filename, htmltoret);
+        	}
+        	return htmltoret;
+	}
 }

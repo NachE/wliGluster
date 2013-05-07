@@ -17,7 +17,7 @@
  *
  */
 
-function ntorage () {
+function Nstorage () {
 
 	this.storagesupport = false; //To not call supports_html5_storage every time
 	this.badstorage = {} //Obj. JavaScript just have int on array index

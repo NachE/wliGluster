@@ -17,16 +17,20 @@
  *
  */
 
-Nstorage = new ntorage();
-Nconfig = new nconfig();
-
-Nconfig.set("config_theme", "default");
-Nconfig.set("config_autoinit", true);
-Nconfig.set("config_server", "");
-//configure the server side interface
-Nconfig.set("config_server_script", "glusterxml.php"); 
-
 $(document).ready(function() {
+
+	nstorage = new Nstorage();
+	nconfig = new Nconfig();
+
+	nconector = new Nconector();
+	nwidget = new Nwidget();
+
+	nconfig.set("config_theme", "default");
+	nconfig.set("config_autoinit", true);
+	nconfig.set("config_server", "");
+	//configure the server side interface
+	nconfig.set("config_server_script", "glusterxml.php"); 
+
 	printC("Web Line Interface for Gluster");
 
 	//load theme files to free server load
@@ -42,7 +46,7 @@ $(document).ready(function() {
 		get_theme_file(themefiles[i]);
 	}
 	
-	if(Nconfig.get("config_autoinit")){
+	if(nconfig.get("config_autoinit")){
 		printC("Auto init enabled, sending first command.");
 		send_command("volume list");
 	}
@@ -73,7 +77,7 @@ $(document).ready(function() {
 
 	$(document).on('click', '#config a[href="#config_wligluster_export"]',
 	function(){
-		Nconfig.export();
+		nconfig.export();
 		return false;
 	});
 });
@@ -88,11 +92,11 @@ $('form#clicommand').submit(function() {
 	
 		printC("Ok, wait...");
 		console.log("sending: "+
-			Nconfig.get("config_server_script")+
+			nconfig.get("config_server_script")+
 			"?command="+command.replace(/ /g,"+"));
 
-		var jqxhr = $.get(Nconfig.get("config_server")+ 
-		Nconfig.get("config_server_script"),
+		var jqxhr = $.get(nconfig.get("config_server")+ 
+		nconfig.get("config_server_script"),
 		{ command: command },
 		function(){
 
@@ -234,10 +238,10 @@ function put_html_on_popup(thehtml){
 //**********************************
 
 function get_theme_file(filename){
-	var htmltoret = Nstorage.getvar("themefile_" + filename);
+	var htmltoret = nstorage.getvar("themefile_" + filename);
 	if(htmltoret === null){
 		$.ajax({
-			url: 'themes/'+Nconfig.get("config_theme")+'/'+filename,
+			url: 'themes/'+nconfig.get("config_theme")+'/'+filename,
 			beforeSend: function ( xhr ) {
 				//the only way I found to ignore html web engine parser
 				xhr.overrideMimeType("text/plain; charset=x-user-defined"); 
@@ -246,7 +250,7 @@ function get_theme_file(filename){
 		}).done(function ( themehtml ) {
 			htmltoret=themehtml;
 		});
-		Nstorage.setvar("themefile_" + filename, htmltoret);
+		nstorage.setvar("themefile_" + filename, htmltoret);
 	}
 	return htmltoret;
 }
@@ -268,13 +272,13 @@ function showform_config_wligluster(){
 	put_file_on_popup('form_config_wligluster.html');
 
 	$('form#config_wligluster '+
-	'input[name="config_server_address"]').val(Nconfig.get("config_server"));
+	'input[name="config_server_address"]').val(nconfig.get("config_server"));
 
 	$('form#config_wligluster '+
-	'input[name="config_server_script"]').val(Nconfig.get("config_server_script"));
+	'input[name="config_server_script"]').val(nconfig.get("config_server_script"));
 
 	$('form#config_wligluster').submit(function(){
-		Nconfig.set(
+		nconfig.set(
 			"config_server", 
 			String(
 				$('form#config_wligluster '+
@@ -282,7 +286,7 @@ function showform_config_wligluster(){
 			)
 		);
 
-		Nconfig.set(
+		nconfig.set(
 			"config_server_script", 
 			String(
 				$('form#config_wligluster '+
