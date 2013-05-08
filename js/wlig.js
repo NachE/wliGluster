@@ -29,14 +29,13 @@ $(document).ready(function() {
 	nconfig.set("config_server", "");
 	//configure the server side interface
 	nconfig.set("config_server_script", "glusterxml.php"); 
-
 	printC("Web Line Interface for Gluster");
 
-	nwindow = new Nwindow();
-	nbutton = new Nbutton();
-	nbutton.append("This is a button");
-	nwindow.append( nbutton );
-
+	//nwindow = new Nwindow();
+	//nbutton = new Nbutton();
+	//nbutton.append("This is a button");
+	//nwindow.append( nbutton );
+	//nbutton.onClick(function(){alert("asdfasdfasdfasdf");});
 	//alert(nwindow.getContentHTML());
 
 	//load theme files to free server load
@@ -150,7 +149,7 @@ $('form#clicommand').submit(function() {
 		.fail(function() {
 			printC("[!] ERROR ON THE WLIGLUSTER SERVER SIDE!");
 		 })
-		.always(function() { printC("Done "+command);  });
+		.always(function() { printC("Done "+command); });
 	}
 	return false;
 });

@@ -28,7 +28,7 @@ function Nwidget(nconfig_object, nconnector_object){
 	this.nconfig = typeof nconfig_object !== 'undefined' ? nconfig_object : nconfig
 	this.nconnector = typeof nconnector_object !== 'undefined' ? nconnecotr_object : nconnector
 	
-	this.type='nwidget';
+	this.typ='nwidget';
 	this.uid = guid(); //always gen unique id
 	this.content = new Object;
 
@@ -55,6 +55,13 @@ function Nwidget(nconfig_object, nconnector_object){
 		this.content.find('.'+this.type+'_body').append(toappend);
 	}
 
+
+	this.onClick = function(function_to_exec){
+		$(document).on('click', '#'+this.uid,function(){
+			function_to_exec();
+		});
+	
+	}
 }
 
 function Nwindow(nconfig_object, nconnector_object){
