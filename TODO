@@ -21,3 +21,7 @@
 
 * Think if we have to separate the emergent menus and
   their events from core and put it on the theme side.
+
+* We are change the way of load js libs so it is
+  async and we have no way to determine when a js
+  is fully loaded. IMPROVE

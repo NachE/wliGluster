@@ -22,8 +22,7 @@ $(document).ready(function() {
 	nstorage = new Nstorage();
 	nconfig = new Nconfig();
 
-	nconector = new Nconector();
-	nwidget = new Nwidget();
+	nconnector = new Nconnector();
 
 	nconfig.set("config_theme", "default");
 	nconfig.set("config_autoinit", true);
@@ -32,6 +31,13 @@ $(document).ready(function() {
 	nconfig.set("config_server_script", "glusterxml.php"); 
 
 	printC("Web Line Interface for Gluster");
+
+	nwindow = new Nwindow();
+	nbutton = new Nbutton();
+	nbutton.append("This is a button");
+	nwindow.append( nbutton );
+
+	//alert(nwindow.getContentHTML());
 
 	//load theme files to free server load
 	printC("Loading interface...");

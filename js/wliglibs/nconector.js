@@ -18,12 +18,12 @@
  */
 
 
-function Nconector(){
+function Nconnector(){
 	this.get_widget_file = function(filename){
-		var htmltoret = Nstorage.getvar("widgetfile_" + filename);
+		var htmltoret = nstorage.getvar("widgetfile_" + filename);
 		if(htmltoret === null){
 			$.ajax({
-				url: 'themes/'+Nconfig.get("config_theme")+'/nwidgets/'+filename,
+				url: 'themes/'+nconfig.get("config_theme")+'/nwidgets/'+filename,
 				beforeSend: function ( xhr ) {
                                 //prevent browser engine to parse content
                                 	xhr.overrideMimeType("text/plain; charset=x-user-defined");
@@ -33,7 +33,7 @@ function Nconector(){
 				htmltoret=themehtml;
 			});
 
-			Nstorage.setvar("widgetfile_" + filename, htmltoret);
+			nstorage.setvar("widgetfile_" + filename, htmltoret);
         	}
         	return htmltoret;
 	}
