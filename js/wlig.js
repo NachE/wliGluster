@@ -31,12 +31,21 @@ $(document).ready(function() {
 	nconfig.set("config_server_script", "glusterxml.php"); 
 	printC("Web Line Interface for Gluster");
 
-	//nwindow = new Nwindow();
-	//nbutton = new Nbutton();
-	//nbutton.append("This is a button");
-	//nwindow.append( nbutton );
-	//nbutton.onClick(function(){alert("asdfasdfasdfasdf");});
-	//alert(nwindow.getContentHTML());
+	nwindow = new Nwindow();
+	nbutton = new Nbutton();
+	nbutton.append("This is a button");
+	nwindow.append( nbutton );
+	nbutton.onClick(function(){alert("asdfasdfasdfasdf");});
+	nwindow.show();
+
+
+	viewtab = new Nviewtab();
+	idtab = viewtab.newTab("testing");
+	idtab2 = viewtab.newTab("testing2");
+	viewtab.append( "fuckoff" , idtab2);
+	viewtab.append( nwindow, idtab);
+	viewtab.show();
+
 
 	//load theme files to free server load
 	printC("Loading interface...");
@@ -181,10 +190,10 @@ function add_tab(id){//LOOK if we can improve this. themable?
 	}else{
 		$("#view > #tabs").append("<li "+
 			"id=\"btab"+tabid+"\"><a href=\"#"+tabid+"\" "+
-			"class=\"tabitem\">"+tabid+"</a></li>");
+			"class=\"tabitem ntabbutton\">"+tabid+"</a></li>");
 
 		var tabobj = $("#view").append("<div "+
-			"id=\""+tabid+"\" class=\"viewtab\">"+
+			"id=\""+tabid+"\" class=\"viewtab ntabcontent\">"+
 			"</div>").find("#"+tabid);
 		show_tab(tabid);
 	}
@@ -202,6 +211,7 @@ function selected_tab(tabid){
 
 function show_tab(tabid){
 	$('#view > .viewtab').hide();
+	$('.ntabcontent').hide();
 	$('#view > #'+tabid).show();
 	selected_tab(tabid);
 	return false;

@@ -3,6 +3,7 @@
 ?>
 <html><head><title>Web Line Interface for GlusterFS (WLI Gluster)</title>
 <link rel="stylesheet" href="<?php echo "themes/".$config_theme."/";?>style/main.css" />
+<link rel="stylesheet" href="<?php echo "themes/".$config_theme."/";?>nwidgets/css/nwidgets.css" />
 </head>
 <body>
 <div id="wrapp">
