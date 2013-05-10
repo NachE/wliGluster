@@ -31,6 +31,8 @@ $(document).ready(function() {
 	nconfig.set("config_server_script", "glusterxml.php"); 
 	printC("Web Line Interface for Gluster");
 
+
+	/******* Testing the new libs **********/
 	nwindow = new Nwindow();
 	nbutton = new Nbutton();
 	nbutton.append("This is a button");
@@ -45,6 +47,9 @@ $(document).ready(function() {
 	viewtab.append( "fuckoff" , idtab2);
 	viewtab.append( nwindow, idtab);
 	viewtab.show();
+
+
+	/**** End of testing the new libs ****/
 
 
 	//load theme files to free server load

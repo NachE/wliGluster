@@ -24,9 +24,15 @@ function guid(){
 		.toString();
 }
 
+// NWidget Toolkit
+// 
+//
+
 function Nwidget(nconfig_object, nconnector_object, preset_uid){
-	this.nconfig = typeof nconfig_object !== 'undefined' ? nconfig_object : nconfig
-	this.nconnector = typeof nconnector_object !== 'undefined' ? nconnector_object : nconnector
+	this.nconfig = typeof nconfig_object !== 'undefined' ? 
+				nconfig_object : nconfig
+	this.nconnector = typeof nconnector_object !== 'undefined' ? 
+				nconnector_object : nconnector
 
 	//always gen unique id
 	this.uid = typeof preset_uid !== 'undefined' ? preset_uid : guid();
@@ -58,7 +64,8 @@ function Nwidget(nconfig_object, nconnector_object, preset_uid){
 	}
 	
 	this.append = function(elm_toappend){
-		var toappend = typeof elm_toappend.type !== 'undefined' ? elm_toappend.getContentObject() : elm_toappend
+		var toappend = typeof elm_toappend.type !== 'undefined' ? 
+			elm_toappend.getContentObject() : elm_toappend;
 		this.content.find('.'+this.type+'_body').append(toappend);
 	}
 
@@ -96,23 +103,32 @@ function Nviewtab(nconfig_object, nconnector_object, preset_uid){
 	
 	this.newTab = function(tabname){
 		var newguid = guid();		
-		this.list_tab[newguid] = new Ntabbutton(nconfig_object, nconnector_object, newguid);
+		this.list_tab[newguid] = 
+			new Ntabbutton(nconfig_object, nconnector_object, newguid);
 		this.list_tab[newguid].append(tabname);
-		this.list_tabcontent[newguid+'_content'] = new Ntabcontent(nconfig_object, nconnector_object, newguid+'_content');
+		this.list_tabcontent[newguid+'_content'] = 
+			new Ntabcontent(nconfig_object, 
+					nconnector_object, 
+					newguid+'_content');
 
 		if(this.showed()){
-			$('#'+this.uid+' .ntabbuttons').append( this.list_tab[newguid].getContentObject() );
-			$('#'+this.uid+' .ntabcontents').append( this.list_tabcontent[newguid].getContentObject() );
+			$('#'+this.uid+' .ntabbuttons').append( 
+				this.list_tab[newguid].getContentObject() );
+			$('#'+this.uid+' .ntabcontents').append( 
+				this.list_tabcontent[newguid].getContentObject() );
 		}else{
-			this.content.find('.ntabbuttons').append( this.list_tab[newguid].getContentObject()  );
-			this.content.find('.ntabcontents').append( this.list_tabcontent[newguid+'_content'].getContentObject()  );
+			this.content.find('.ntabbuttons').append( 
+				this.list_tab[newguid].getContentObject()  );
+			this.content.find('.ntabcontents').append( 
+				this.list_tabcontent[newguid+'_content'].getContentObject()  );
 		}
 
 		return newguid;
 	}
 	
 	this.append = function(elm_toappend, tabid){
-		var toappend = typeof elm_toappend.type !== 'undefined' ? elm_toappend.getContentObject() : elm_toappend
+		var toappend = typeof elm_toappend.type !== 'undefined' ? 
+			elm_toappend.getContentObject() : elm_toappend;
 		if(this.showed()){
 			$('#'+this.uid+' #'+tabid+'_content .ntabcontent_body').append(toappend);
 		}else{
@@ -129,9 +145,8 @@ function Nviewtab(nconfig_object, nconnector_object, preset_uid){
 	}
 
 	var parent = this;
-	//events for this
+	//specific events
 	$(document).on('click', '#'+this.uid+' .ntabbutton',function(){
-		
 		parent.showTab( $(this).attr('id') );
 	});
 }
@@ -163,5 +178,31 @@ function Nbutton(button_text, nconfig_object, nconnector_object, preset_uid){
 function Nlabel(label_text, nconfig_object, nconnector_object, preset_uid){
         Nwidget.call(this,nconfig_object, nconnector_object, preset_uid);
         this.type='nlabel';
-        this.loadContent("nlabelhtml");
+        this.loadContent("nlabel.html");
 }
+
+/***** generic events *****/
+$(document).on('click','.nwindow_control .nwindow_control_close', function(){
+	$(this).parents('.nwindow').hide();
+});
+
+//Draggable windows
+$(document).on('mousedown', '.nwindow_control', function(e){
+	var thewindow = this;
+	var Xdiff = e.pageX - $(thewindow).offset().left;
+	var Ydiff = e.pageY - $(thewindow).offset().top;
+	e.preventDefault();
+	$(document).unbind('mousemove');
+	$(document).bind('mousemove', function(e){
+		var newleft = (e.pageX - Xdiff) >= 0 ? parseInt(e.pageX - Xdiff) : 0;
+		var newtop = (e.pageY - Ydiff) >= 0 ? parseInt(e.pageY - Ydiff) : 0;
+		$(thewindow).parents('.nwindow').offset({ top: newtop, left: newleft });
+		return false;
+	});
+	$(document).bind('mouseup',function(){
+		$(document).attr('unselectable','off');
+		$(document).unbind('mousemove');
+		return false;
+	});
+	return false;
+});
