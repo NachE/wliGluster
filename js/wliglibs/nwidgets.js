@@ -181,6 +181,36 @@ function Nlabel(label_text, nconfig_object, nconnector_object, preset_uid){
         this.loadContent("nlabel.html");
 }
 
+function Nmenu(parent_text,nconfig_object, nconnector_object, preset_uid){
+	Nwidget.call(this,nconfig_object, nconnector_object, preset_uid);
+	this.type='nmenu';
+	this.loadContent("nmenu.html")
+	this.elements = {};
+	this.content.find('.nmenuparentelement').append(parent_text);
+
+	this.addElement = function(element_text){
+		var newuid = guid();
+		this.elements[newuid] =
+                        new NmenuElement(element_text,nconfig_object, nconnector_object, newuid);
+		if(this.showed()){
+			$('#'+this.uid).append(
+                                this.elements[newuid].getContentObject() );
+		}else{
+			this.append(this.elements[newuid].getContentObject());
+		}
+		return this.elements[newuid];
+	}
+	
+
+}
+
+function NmenuElement(element_text, nconfig_object, nconnector_object, preset_uid){
+	Nwidget.call(this,nconfig_object, nconnector_object, preset_uid);
+	this.type='nmenuelement';
+	this.loadContent("nmenuelement.html")
+	this.append(element_text);
+}
+
 /***** generic events *****/
 $(document).on('click','.nwindow_control .nwindow_control_close', function(){
 	$(this).parents('.nwindow').hide();
@@ -205,4 +235,9 @@ $(document).on('mousedown', '.nwindow_control', function(e){
 		return false;
 	});
 	return false;
+});
+
+//Emergent menu
+$(document).on('click', '.nmenu',function(){
+	$(this).find('.nmenu_body').toggle();
 });

@@ -48,6 +48,12 @@ $(document).ready(function() {
 	viewtab.append( nwindow, idtab);
 	viewtab.show();
 
+	menu1 = new Nmenu('MENU1');
+	menu1.addElement("Elemento 1").onClick(function(){alert("i am a menu")});
+	menu1.addElement("Elemento 2");	
+	//menu1.show();
+	nwindow.append(menu1);
+
 
 	/**** End of testing the new libs ****/
 

@@ -98,3 +98,43 @@
 	background-color: #ffffff;
 	border-top: 1px solid #000000;
 }
+
+.nmenu{
+	float: left;
+	border: 1px solid #000000;
+	cursor: pointer;
+}
+
+.nmenuparentelement{
+	padding: 5px;
+	cursor: pointer;
+}
+
+.nmenuparentelement:hover {
+	background-color: #0f6;
+}
+
+.nmenu_body{
+	position: absolute;
+	display: none;
+	background-color: white;
+	border: 1px solid black;
+	z-index: 4;
+}
+
+.nmenuelement{
+	padding: 10px;
+	display: block;
+}
+
+.nmenuelement:hover {
+	background-color: #0f6;
+        color: #333333;
+
+}
+
+.nmenuelement p{
+	display: block;
+	padding: 0px;
+	margin: 0px;
+}
