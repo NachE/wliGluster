@@ -29,6 +29,8 @@ function guid(){
 //
 
 function Nwidget(nconfig_object, nconnector_object, preset_uid){
+	var self = this;
+
 	this.nconfig = typeof nconfig_object !== 'undefined' ? 
 				nconfig_object : nconfig
 	this.nconnector = typeof nconnector_object !== 'undefined' ? 
@@ -66,10 +68,18 @@ function Nwidget(nconfig_object, nconnector_object, preset_uid){
 	}
 	
 	this.append = function(elm_toappend){
+		elm_toappend = typeof elm_toappend !== 'undefined' ?
+			elm_toappend : String();
 		var toappend = typeof elm_toappend.type !== 'undefined' ? 
 			elm_toappend.getContentObject() : elm_toappend;
 		this.content.find('.'+this.type+'_body').append(toappend);
 		return this;
+	}
+
+	this.appendm = function(elements_toappend){
+		for(var key in elements_toappend) {
+			this.append( elements_toappend[key] );
+		}
 	}
 
 	this.onClick = function(function_to_exec){
@@ -98,12 +108,35 @@ function Nwidget(nconfig_object, nconnector_object, preset_uid){
 		return this;
 	}
 
+	this.hide = function(){
+		this.content.hide();
+	}
+
 	this.clear = function(){
-		$('#'+this.uid).html("");
-		$('#'+this.uid).text("");
-		this.loadContent();
+		$('#'+this.uid).find('.'+this.type+'_body').html("");
+		$('#'+this.uid).find('.'+this.type+'_body').text("");
+		this.content = $('#'+this.uid);
 		return this;
 	}
+
+	// OK we are going to try this.
+	// We dont want differences between
+	// this.content and the DOM
+//	$('#'+this.uid).ready(function(){
+		//alert(self.type+"loaded "+self.uid);
+		//self.content = $('#'+self.uid);
+//		self.content = "";
+//		self.content = function(){
+//			return $('#'+self.uid);
+//		}
+//		self.content = this;
+//	});
+
+//$(document).on('ready', '#'+this.uid ,function(){
+//	alert(this.type+" loaded");
+//});
+
+
 }
 
 function Nviewtab(nconfig_object, nconnector_object, preset_uid){
@@ -123,17 +156,20 @@ function Nviewtab(nconfig_object, nconnector_object, preset_uid){
 					nconnector_object, 
 					newguid+'_content');
 
-		if(this.showed()){
-			$('#'+this.uid+' .ntabbuttons').append( 
-				this.list_tab[newguid].getContentObject() );
-			$('#'+this.uid+' .ntabcontents').append( 
-				this.list_tabcontent[newguid].getContentObject() );
-		}else{
+		// JavaScript and JQuery seems to be
+		// a really OO lang, so... maybe its
+		// no needed
+		//if(this.showed()){
+		//	$('#'+this.uid+' .ntabbuttons').append( 
+		//		this.list_tab[newguid].getContentObject() );
+		//	$('#'+this.uid+' .ntabcontents').append( 
+		//		this.list_tabcontent[newguid].getContentObject() );
+		//}else{
 			this.content.find('.ntabbuttons').append( 
 				this.list_tab[newguid].getContentObject()  );
 			this.content.find('.ntabcontents').append( 
 				this.list_tabcontent[newguid+'_content'].getContentObject()  );
-		}
+		//}
 
 		return newguid;
 	}
@@ -186,6 +222,7 @@ function Nbutton(button_text, nconfig_object, nconnector_object, preset_uid){
 	Nwidget.call(this,nconfig_object, nconnector_object, preset_uid);
 	this.type='nbutton';
 	this.loadContent("nbutton.html");
+		this.append(button_text);
 }
 
 function Nlabel(label_text, nconfig_object, nconnector_object, preset_uid){
@@ -248,7 +285,7 @@ function Nform(nconfig_object, nconnector_object, preset_uid){
 	this.loadContent("nform.html");
 }
 
-function Ninput(label_text, nconfig_object, nconnector_object, preset_uid){
+function Ninput(label_text, input_value, nconfig_object, nconnector_object, preset_uid){
 	Nwidget.call(this,nconfig_object, nconnector_object, preset_uid);
 	this.type='ninput';
 	this.loadContent("ninput.html");
@@ -257,10 +294,12 @@ function Ninput(label_text, nconfig_object, nconnector_object, preset_uid){
 	
 	this.append = function(){ return false; }
 	this.value = function(args){
-		return this.content.find('.ninput_body').val();
+		return typeof args !== 'undefined' ? 
+			this.content.find('.ninput_body').val(args) : 
+			this.content.find('.ninput_body').val()
 	}
+	this.value(input_value);
 }
-
 
 
 /***** generic events *****/

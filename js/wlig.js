@@ -71,8 +71,62 @@ $(document).ready(function() {
 	form1.append(cosa2);
 	form1.append("asdfff");
 	nwindow.append(form1);
-
 	/**** End of testing the new libs ****/
+
+
+	/***** The new libs to production ****/
+	configMenu = new Nmenu('Configuration');
+	configMenu.addElement("General Config").onClick(function(){alert("i am a menu")});
+	configMenu.addElement("Export Config");
+	configMenu.addElement("Import Config");
+		
+
+	function WliMainGui(){
+		this.nconfig = new Nconfig();
+		this.nw = {}
+		var self = this;
+		
+		//render the initial interface
+		this.renderBasic = function(){
+			var configMenu = new Nmenu('Configuration');
+			configMenu.addElement("General Config").onClick(function(){self.configWindow()});
+			configMenu.addElement("Export Config");
+			configMenu.addElement("Import Config");
+			configMenu.content.css("float", "right");
+			configMenu.show();
+		}
+
+		//the window with general parameters
+		this.configWindow = function(){
+			if(typeof this.nw['configWindow'] == 'undefined' ){
+				this.nw['configWindow'] = new Nwindow();
+			}else{
+				this.nw['configWindow'].clear();
+			}
+			this.nw['configWindow'].append(new Nlabel("<h1>General Configuration</h1>"));
+			var input_address = new Ninput("Server Address", this.nconfig.get("config_server"));
+			var input_script = new Ninput("Server Script", this.nconfig.get("config_server_script"));
+			var button_send = new Nbutton("OK, let's go");
+			button_send.onClick(function(){
+				self.nconfig.set("config_server", input_address.value());
+				self.nconfig.set("config_server_script", input_script.value());
+				self.nw['configWindow'].hide();
+			});
+			var form1 = new Nform();
+			form1.append(input_address).append(input_script).append(button_send);
+			
+			this.nw['configWindow'].append(form1);
+			this.nw['configWindow'].show();
+		}
+
+	}
+	mainGui = new WliMainGui();
+	mainGui.renderBasic();
+		
+
+
+	/**** End of new libs to production ****/
+
 
 	//load theme files to free server load
 	printC("Loading interface...");
@@ -563,4 +617,6 @@ function volumen_info(gxml){
 function volumen_status(data){ 
 	alert("vol status not implemented yet"); }
 //*** End of show and parse Responses
+
+
 
