@@ -54,9 +54,25 @@ $(document).ready(function() {
 	//menu1.show();
 	nwindow.append(menu1);
 
+	box1 = new Nbox();
+
+	link1 = new Nlink("#asdf").append(  new Nlabel("Holaaa") ).onClick(function(){ nwindow.show();  });
+
+	box1.append(link1);
+
+	box1.append(new Nlabel("<h1>TExt</h1>"));
+	//box1.show();
+	viewtab.append( box1, idtab );
+
+	form1 = new Nform();
+	cosa1 = new Ninput("cosa");
+	cosa2 = new Ninput("csoa2");
+	form1.append(cosa1);
+	form1.append(cosa2);
+	form1.append("asdfff");
+	nwindow.append(form1);
 
 	/**** End of testing the new libs ****/
-
 
 	//load theme files to free server load
 	printC("Loading interface...");

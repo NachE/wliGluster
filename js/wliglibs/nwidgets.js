@@ -49,10 +49,12 @@ function Nwidget(nconfig_object, nconnector_object, preset_uid){
 
 	this.changeWidgetUID = function(uid){
 		this.uid = uid;
+		return this;
 	}
 
 	this.setWidgetUID = function(){
 		this.content.attr("id", this.uid);
+		return this;
 	}
 
 	this.getContentHTML = function(){
@@ -67,12 +69,14 @@ function Nwidget(nconfig_object, nconnector_object, preset_uid){
 		var toappend = typeof elm_toappend.type !== 'undefined' ? 
 			elm_toappend.getContentObject() : elm_toappend;
 		this.content.find('.'+this.type+'_body').append(toappend);
+		return this;
 	}
 
 	this.onClick = function(function_to_exec){
 		$(document).on('click', '#'+this.uid,function(){
 			function_to_exec();
 		});
+		return this;
 	}
 
 	this.showed = function(){
@@ -91,6 +95,14 @@ function Nwidget(nconfig_object, nconnector_object, preset_uid){
 			//not exist, put on body
 			$('body').append(this.content);
 		}
+		return this;
+	}
+
+	this.clear = function(){
+		$('#'+this.uid).html("");
+		$('#'+this.uid).text("");
+		this.loadContent();
+		return this;
 	}
 }
 
@@ -134,6 +146,7 @@ function Nviewtab(nconfig_object, nconnector_object, preset_uid){
 		}else{
 			this.content.find('#'+tabid+'_content .ntabcontent_body').append(toappend);
 		}
+		return this;
 	}
 	
 	this.showTab = function(tabid){
@@ -178,13 +191,27 @@ function Nbutton(button_text, nconfig_object, nconnector_object, preset_uid){
 function Nlabel(label_text, nconfig_object, nconnector_object, preset_uid){
         Nwidget.call(this,nconfig_object, nconnector_object, preset_uid);
         this.type='nlabel';
-        this.loadContent("nlabel.html");
+        this.content = $('<div/>').html(label_text).contents();
+}
+
+function Nlink(link_href, nconfig_object, nconnector_object, preset_uid){
+	Nwidget.call(this,nconfig_object, nconnector_object, preset_uid);
+	this.type='nlink';
+	this.loadContent("nlink.html");
+	this.content.attr("href",link_href);
+
+	this.append = function(elm_toappend){
+		var toappend = typeof elm_toappend.type !== 'undefined' ?
+				elm_toappend.getContentHTML() : elm_toappend;
+		this.content.text(toappend);
+		return this;
+	}
 }
 
 function Nmenu(parent_text,nconfig_object, nconnector_object, preset_uid){
 	Nwidget.call(this,nconfig_object, nconnector_object, preset_uid);
 	this.type='nmenu';
-	this.loadContent("nmenu.html")
+	this.loadContent("nmenu.html");
 	this.elements = {};
 	this.content.find('.nmenuparentelement').append(parent_text);
 
@@ -200,16 +227,41 @@ function Nmenu(parent_text,nconfig_object, nconnector_object, preset_uid){
 		}
 		return this.elements[newuid];
 	}
-	
-
 }
 
 function NmenuElement(element_text, nconfig_object, nconnector_object, preset_uid){
 	Nwidget.call(this,nconfig_object, nconnector_object, preset_uid);
 	this.type='nmenuelement';
-	this.loadContent("nmenuelement.html")
+	this.loadContent("nmenuelement.html");
 	this.append(element_text);
 }
+
+function Nbox(nconfig_object, nconnector_object, preset_uid){
+	Nwidget.call(this,nconfig_object, nconnector_object, preset_uid);
+	this.type='nbox';
+	this.loadContent("nbox.html");
+}
+
+function Nform(nconfig_object, nconnector_object, preset_uid){
+	Nwidget.call(this,nconfig_object, nconnector_object, preset_uid);
+	this.type='nform';
+	this.loadContent("nform.html");
+}
+
+function Ninput(label_text, nconfig_object, nconnector_object, preset_uid){
+	Nwidget.call(this,nconfig_object, nconnector_object, preset_uid);
+	this.type='ninput';
+	this.loadContent("ninput.html");
+	this.content.prepend(label_text);
+	this.content.find('.ninput_body').attr("name", this.uid);
+	
+	this.append = function(){ return false; }
+	this.value = function(args){
+		return this.content.find('.ninput_body').val();
+	}
+}
+
+
 
 /***** generic events *****/
 $(document).on('click','.nwindow_control .nwindow_control_close', function(){
@@ -227,6 +279,8 @@ $(document).on('mousedown', '.nwindow_control', function(e){
 		var newleft = (e.pageX - Xdiff) >= 0 ? parseInt(e.pageX - Xdiff) : 0;
 		var newtop = (e.pageY - Ydiff) >= 0 ? parseInt(e.pageY - Ydiff) : 0;
 		$(thewindow).parents('.nwindow').offset({ top: newtop, left: newleft });
+		//$(thewindow).parents('.nwindow').css("left",newleft+"px");
+		//$(thewindow).parents('.nwindow').css("top",newtop+"px");
 		return false;
 	});
 	$(document).bind('mouseup',function(){
