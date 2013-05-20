@@ -225,3 +225,18 @@ ul {
 	-moz-box-shadow: 3px 6px 12px #aaaaaa;
 	-webkit-box-shadow: 3px 6px 12px #aaaaaa;
 }
+
+
+/****** Here the new style, in a future remove above ****/
+
+.volumelistbox{
+	float: left;
+	padding: 10px;
+	margin: 10px;
+}
+
+.volumelistbox .nlink{
+	display: block;
+	font-size: 15px;
+	margin: 5px;
+}

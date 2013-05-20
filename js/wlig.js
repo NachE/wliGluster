@@ -75,15 +75,16 @@ $(document).ready(function() {
 
 
 	/***** The new libs to production ****/
-	configMenu = new Nmenu('Configuration');
-	configMenu.addElement("General Config").onClick(function(){alert("i am a menu")});
-	configMenu.addElement("Export Config");
-	configMenu.addElement("Import Config");
+	//configMenu = new Nmenu('Configuration');
+	//configMenu.addElement("General Config").onClick(function(){alert("i am a menu")});
+	//configMenu.addElement("Export Config");
+	//configMenu.addElement("Import Config");
 		
 
 	function WliMainGui(){
 		this.nconfig = new Nconfig();
-		this.nw = {}
+		this.viewtab =  new Nviewtab();
+		this.nw = {};
 		var self = this;
 		
 		//render the initial interface
@@ -94,7 +95,43 @@ $(document).ready(function() {
 			configMenu.addElement("Import Config");
 			configMenu.content.css("float", "right");
 			configMenu.show();
+			this.viewtab.show();
 		}
+
+
+		this.tabVolumelist = function(gxml){
+			if(typeof this.nw['tabVolumelist'] == 'undefined' ){
+				this.nw['tabVolumelist'] = this.viewtab.newTab("Volume list");
+			}
+			
+			this.viewtab.clear(this.nw['tabVolumelist']);
+		        $(gxml).find('cliOutput > volList > volume').each(function(){
+
+				var volumeMenu = new Nmenu("Actions");
+				var box = new Nbox();
+				box.content.addClass("volumelistbox");
+
+				volumeMenu.addElement("Volume Start");
+				volumeMenu.addElement("Volume Stop");
+				volumeMenu.addElement("Volume Info");
+				volumeMenu.addElement("Volume Status");
+				volumeMenu.addElement("Volume Status Detail");
+				volumeMenu.addElement("-");
+				volumeMenu.addElement("Volume Add Brick");
+				box.append( 
+					(new Nlink("#")).append( 
+						new Nlabel( $(this).text() ) 
+					).onClick(function(){ 
+						alert("cosa"); 
+					})      
+				);
+				box.append(volumeMenu);
+				self.viewtab.append(box, self.nw['tabVolumelist']);
+				
+			});
+			this.viewtab.showTab(this.nw['tabVolumelist']);
+		}
+
 
 		//the window with general parameters
 		this.configWindow = function(){
@@ -106,14 +143,15 @@ $(document).ready(function() {
 			this.nw['configWindow'].append(new Nlabel("<h1>General Configuration</h1>"));
 			var input_address = new Ninput("Server Address", this.nconfig.get("config_server"));
 			var input_script = new Ninput("Server Script", this.nconfig.get("config_server_script"));
-			var button_send = new Nbutton("OK, let's go");
-			button_send.onClick(function(){
+			var button_send = (new Nbutton("OK, let's go")).onClick(function(){
 				self.nconfig.set("config_server", input_address.value());
 				self.nconfig.set("config_server_script", input_script.value());
 				self.nw['configWindow'].hide();
 			});
 			var form1 = new Nform();
-			form1.append(input_address).append(input_script).append(button_send);
+			var boxbuttons1 = new Nboxbuttons();
+			boxbuttons1.append(button_send);
+			form1.append(input_address).append(input_script).append(boxbuttons1);
 			
 			this.nw['configWindow'].append(form1);
 			this.nw['configWindow'].show();
@@ -220,7 +258,7 @@ $('form#clicommand').submit(function() {
 
 				$(data).find('cliOutput > volList').each(
 				function(){
-					volumen_list(data); });
+					volumen_list(data); mainGui.tabVolumelist(data); });
 
 				$(data).find('cliOutput > volStart').each(
 				function(){
