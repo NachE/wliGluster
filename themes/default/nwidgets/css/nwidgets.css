@@ -1,32 +1,39 @@
+div, ul, li, form, p{
+        -moz-border-radius: 2px;
+        border-radius: 2px;
+}
+
+
 .nwindow{
-	background-color: #ffffff;
-	box-shadow: 2px 4px 20px #005470;
-	-moz-box-shadow: 2px 4px 20px #005470;
-	-webkit-box-shadow: 2px 4px 20px #005470;
+	background-color: rgba(99, 156, 189, 0.9);
+	box-shadow: 0px 2px 5px #005470;
+	-moz-box-shadow: 0px 2px 5px #005470;
+	-webkit-box-shadow: 0px 2px 5px #005470;
 	position: absolute;
 	z-index: 1000;
-	border: 1px solid #000000;
+	border: 1px solid #0099A7;
 	left: 27%;
 	top: 100px;
 	padding: 0px;
 	text-align: right;
 }
 .nwindow_control{
-	border: 1px solid #000000;
-	height: 20px;
+	height: 25px;
 	width: 100%;
 	padding: 0px;
 }
 .nwindow_control_close{
 	float: right;
 	display: block;
+	color: #ffffff;
 	cursor: pointer;
 	height: 20px;
-	width: 20px;
+	padding: 2px;
 }
 
 .nwindow_control_close:hover {
-	background-color: #00aa00;
+	color: #000000;
+	background-color: #10FFA9;
 }
 
 .nwindow_body{
@@ -44,12 +51,15 @@
 	padding: 15px;
 	border: 1px solid #333333;
 	background-color: #ffffff;
+	box-shadow: 0px 0px 2px #005470;
+	-moz-box-shadow: 0px 0px 2px #005470;
+	-webkit-box-shadow: 0px 0px 2px #005470;
 }
 
 .nbutton:hover {
-	box-shadow: 2px 4px 20px #005470;
-	-moz-box-shadow: 2px 4px 20px #005470;
-	-webkit-box-shadow: 2px 4px 20px #005470;
+	box-shadow: 0px 0px 2px #10FFA9;
+	-moz-box-shadow: 0px 0px 2px #10FFA9;
+	-webkit-box-shadow: 0px 0px 2px #10FFA9;
 }
 
 .nbutton_body{
@@ -57,16 +67,15 @@
 }
 
 .nboxbuttons{
-	background-color: rgb(51, 51, 51);
+	background-color: #ddd;
 	display: block;
 	font-family: Verdana;
 	font-size: 10px;
-	height: 62px;
+	height: 57px;
 	margin-bottom: -40px;
 	margin-left: -30px;
 	margin-right: -30px;
 	margin-top: 20px;
-	padding-bottom: 15px;
 	padding-left: 15px;
 	padding-right: 15px;
 	padding-top: 15px;
@@ -124,7 +133,7 @@
 .nmenu_body{
 	position: absolute;
 	display: none;
-	background-color: white;
+	background-color: rgba(230, 255, 230, 0.9);
 	border: 1px solid black;
 	z-index: 4;
 }
