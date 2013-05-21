@@ -75,15 +75,10 @@ $(document).ready(function() {
 
 
 	/***** The new libs to production ****/
-	//configMenu = new Nmenu('Configuration');
-	//configMenu.addElement("General Config").onClick(function(){alert("i am a menu")});
-	//configMenu.addElement("Export Config");
-	//configMenu.addElement("Import Config");
-		
-
 	function WliMainGui(){
 		this.nconfig = new Nconfig();
 		this.viewtab =  new Nviewtab();
+		//control common widgets like tabs and windows
 		this.nw = {};
 		var self = this;
 		
@@ -112,14 +107,14 @@ $(document).ready(function() {
 				.onClick(function(){send_command("volume status "+volumename)});
 			volumeMenu.addElement("Volume Status Detail");
 			volumeMenu.addElement("-");
-			volumeMenu.addElement("Volume Add Brick");
+			volumeMenu.addElement("Volume Add Brick")
+				.onClick(function(){ self.windowAddbrick(volumename) });
 			return volumeMenu;
 		}
 
 		this.tabVolumeinfo = function(gxml){
 			return false;
 		}
-
 
 		//I dont like this way to manage tab widget, see later
 		//this func show the "volume list" command in a graphical way
@@ -153,36 +148,51 @@ $(document).ready(function() {
 		}
 
 		//the window to add new brick to volume
-		this.windowAddbrick = function(){
+		this.windowAddbrick = function(volumename){
 			//Type: Stripe, replica
 			//Count:
 			//Brick Path
-			return false;
+			var windowAddbrick = new Nwindow();
+			var radio_stripe  = new Nradio("Stripe","stripe").group("type");
+			var radio_replica = new Nradio("Replica","replica").group("type");
+			var input_count = new Ninput("Count");
+			var input_brick_path = new Ninput("Brick Path");
+			var button_send = new Nbutton("Do it!")
+				.onClick(function(){
+					alert(windowAddbrick.content.find('input[name=type]:radio:checked').val());
+				});
+			var form = new Nform();
+			form.append(new Nlabel("<h1>Add brick to "+volumename+"</h1>"))
+				.append(radio_stripe)
+				.append(radio_replica)
+				.append(input_count)
+				.append(input_brick_path)
+				.append( new Nboxbuttons().append(button_send) );
+			windowAddbrick.append(form);
+			windowAddbrick.show();
+			return windowAddbrick;
 		}
 
 		//the window with general parameters. Configuration.
 		this.windowConfig = function(){
-			if(typeof this.nw['configWindow'] == 'undefined' ){
-				this.nw['configWindow'] = new Nwindow();
-			}else{
-				this.nw['configWindow'].clear();
-			}
-			this.nw['configWindow'].append(new Nlabel("<h1>General Configuration</h1>"));
+			var configWindow = new Nwindow();
 			var input_address = new Ninput("Server Address", this.nconfig.get("config_server"));
 			var input_script = new Ninput("Server Script", this.nconfig.get("config_server_script"));
 			var button_send = (new Nbutton("OK, let's go"))
 				.onClick(function(){
 					self.nconfig.set("config_server", input_address.value());
 					self.nconfig.set("config_server_script", input_script.value());
-					self.nw['configWindow'].hide();
+					configWindow.destroy();
 				});
 			var form1 = new Nform();
-			var boxbuttons1 = new Nboxbuttons();
-			boxbuttons1.append(button_send);
-			form1.append(input_address).append(input_script).append(boxbuttons1);
-			
-			this.nw['configWindow'].append(form1);
-			this.nw['configWindow'].show();
+			form1.append(new Nlabel("<h1>General Configuration</h1>"))
+				.append(input_address)
+				.append(input_script)
+				.append( new Nboxbuttons().append(button_send) );
+					
+			configWindow.append(form1);
+			configWindow.show();
+			return configWindow;
 		}
 
 		this.volumeStop = function(volume){
@@ -197,7 +207,6 @@ $(document).ready(function() {
 	mainGui = new WliMainGui();
 	mainGui.renderBasic();
 		
-
 
 	/**** End of new libs to production ****/
 

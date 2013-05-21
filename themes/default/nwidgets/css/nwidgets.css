@@ -158,3 +158,8 @@ div, ul, li, form, p{
 .ninput{
 	clear: both;
 }
+
+.nradio{
+	width: 100%;
+	text-align: left;
+}

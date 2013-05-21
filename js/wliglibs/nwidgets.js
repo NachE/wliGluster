@@ -118,6 +118,10 @@ function Nwidget(nconfig_object, nconnector_object, preset_uid){
 		this.content = $('#'+this.uid);
 		return this;
 	}
+
+	this.destroy = function(){
+		this.content.remove();
+	}
 }
 
 function Nviewtab(nconfig_object, nconnector_object, preset_uid){
@@ -203,6 +207,12 @@ function Nwindow(nconfig_object, nconnector_object, preset_uid){
 	Nwidget.call(this,nconfig_object, nconnector_object, preset_uid);
 	this.type='nwindow';
 	this.loadContent("nwindow.html");
+
+	this.hideOnClose = function(){
+		$(document).on('click', '#'+this.uid+' .nwindow_control_close', function(){
+			self.hide();
+		});
+	}
 }
 
 function Nbutton(button_text, nconfig_object, nconnector_object, preset_uid){
@@ -294,10 +304,23 @@ function Ninput(label_text, input_value, nconfig_object, nconnector_object, pres
 	this.value(input_value);
 }
 
+function Nradio(label_text, radio_value, nconfig_object, nconnector_object, preset_uid){
+	Nwidget.call(this,nconfig_object, nconnector_object, preset_uid);
+	this.type='nradio';
+	this.loadContent("nradio.html");
+	this.content.find('.nradio_body').parent().append(label_text);
+	this.content.find('.nradio_body').val(radio_value);
+	
+	this.group = function(group_name){
+		this.content.find('.nradio_body').attr("name",group_name);
+		return this;
+	}
+
+}
 
 /***** generic events *****/
 $(document).on('click','.nwindow_control .nwindow_control_close', function(){
-	$(this).parents('.nwindow').hide();
+	$(this).parents('.nwindow').remove();
 });
 
 //Draggable windows
