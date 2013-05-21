@@ -90,7 +90,8 @@ $(document).ready(function() {
 		//render the initial interface
 		this.renderBasic = function(){
 			var configMenu = new Nmenu('Configuration');
-			configMenu.addElement("General Config").onClick(function(){self.configWindow()});
+			configMenu.addElement("General Config")
+				.onClick(function(){self.windowConfig()});
 			configMenu.addElement("Export Config");
 			configMenu.addElement("Import Config");
 			configMenu.content.css("float", "right");
@@ -98,43 +99,69 @@ $(document).ready(function() {
 			this.viewtab.show();
 		}
 
+		//the common menu used for each volume
+		this.menuVolume = function(volumename){
+			var volumeMenu = new Nmenu("Actions");
+			volumeMenu.addElement("Volume Start")
+				.onClick(function(){send_command("volume start "+volumename)});
+			volumeMenu.addElement("Volume Stop")
+				.onClick(function(){self.volumeStop(volumename)});
+			volumeMenu.addElement("Volume Info")
+				.onClick(function(){send_command("volume info "+volumename)});
+			volumeMenu.addElement("Volume Status")
+				.onClick(function(){send_command("volume status "+volumename)});
+			volumeMenu.addElement("Volume Status Detail");
+			volumeMenu.addElement("-");
+			volumeMenu.addElement("Volume Add Brick");
+			return volumeMenu;
+		}
 
+		this.tabVolumeinfo = function(gxml){
+			return false;
+		}
+
+
+		//I dont like this way to manage tab widget, see later
+		//this func show the "volume list" command in a graphical way
 		this.tabVolumelist = function(gxml){
+			//create the tab if not exist
 			if(typeof this.nw['tabVolumelist'] == 'undefined' ){
 				this.nw['tabVolumelist'] = this.viewtab.newTab("Volume list");
 			}
 			
+			//clear the tab content
 			this.viewtab.clear(this.nw['tabVolumelist']);
-		        $(gxml).find('cliOutput > volList > volume').each(function(){
 
-				var volumeMenu = new Nmenu("Actions");
+			//foreach the xml returned from gluster command on server
+		        $(gxml).find('cliOutput > volList > volume').each(function(){
+				//the follow is for each volume name
+				var volumename = $(this).text();
+
 				var box = new Nbox();
 				box.content.addClass("volumelistbox");
-
-				volumeMenu.addElement("Volume Start");
-				volumeMenu.addElement("Volume Stop");
-				volumeMenu.addElement("Volume Info");
-				volumeMenu.addElement("Volume Status");
-				volumeMenu.addElement("Volume Status Detail");
-				volumeMenu.addElement("-");
-				volumeMenu.addElement("Volume Add Brick");
-				box.append( 
-					(new Nlink("#")).append( 
-						new Nlabel( $(this).text() ) 
-					).onClick(function(){ 
-						alert("cosa"); 
-					})      
+				box.append(
+					(new Nlink("#")).append(
+						new Nlabel( volumename )
+					).onClick(function(){
+						send_command("volume info "+volumename)
+					}) 
 				);
-				box.append(volumeMenu);
+				box.append(self.menuVolume(volumename));
 				self.viewtab.append(box, self.nw['tabVolumelist']);
-				
 			});
 			this.viewtab.showTab(this.nw['tabVolumelist']);
 		}
 
+		//the window to add new brick to volume
+		this.windowAddbrick = function(){
+			//Type: Stripe, replica
+			//Count:
+			//Brick Path
+			return false;
+		}
 
-		//the window with general parameters
-		this.configWindow = function(){
+		//the window with general parameters. Configuration.
+		this.windowConfig = function(){
 			if(typeof this.nw['configWindow'] == 'undefined' ){
 				this.nw['configWindow'] = new Nwindow();
 			}else{
@@ -143,11 +170,12 @@ $(document).ready(function() {
 			this.nw['configWindow'].append(new Nlabel("<h1>General Configuration</h1>"));
 			var input_address = new Ninput("Server Address", this.nconfig.get("config_server"));
 			var input_script = new Ninput("Server Script", this.nconfig.get("config_server_script"));
-			var button_send = (new Nbutton("OK, let's go")).onClick(function(){
-				self.nconfig.set("config_server", input_address.value());
-				self.nconfig.set("config_server_script", input_script.value());
-				self.nw['configWindow'].hide();
-			});
+			var button_send = (new Nbutton("OK, let's go"))
+				.onClick(function(){
+					self.nconfig.set("config_server", input_address.value());
+					self.nconfig.set("config_server_script", input_script.value());
+					self.nw['configWindow'].hide();
+				});
 			var form1 = new Nform();
 			var boxbuttons1 = new Nboxbuttons();
 			boxbuttons1.append(button_send);
@@ -155,6 +183,14 @@ $(document).ready(function() {
 			
 			this.nw['configWindow'].append(form1);
 			this.nw['configWindow'].show();
+		}
+
+		this.volumeStop = function(volume){
+			if (confirm("Stopping volume will make its data inaccessible."+
+					" Do you want to continue?"))
+			{
+				send_command("volume stop "+volume);
+                        }
 		}
 
 	}
@@ -281,6 +317,14 @@ $('form#clicommand').submit(function() {
 	}
 	return false;
 });
+
+
+
+
+/**************WARNING, BELOW YOU HAVE OLD FUNCTIONS, IT WILL BE REMOVED SOON*****************/
+
+
+
 
 
 
