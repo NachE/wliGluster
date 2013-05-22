@@ -159,7 +159,12 @@ $(document).ready(function() {
 			var input_brick_path = new Ninput("Brick Path");
 			var button_send = new Nbutton("Do it!")
 				.onClick(function(){
-					alert(windowAddbrick.content.find('input[name=type]:radio:checked').val());
+					//ugly way to search radiobuttons, see later
+					var type = windowAddbrick.content
+						.find('input[name=type]:radio:checked').val()
+					send_command("volume add-brick "+volumename+
+						" "+type+" "+input_count.value()+
+						" "+input_brick_path.value());
 				});
 			var form = new Nform();
 			form.append(new Nlabel("<h1>Add brick to "+volumename+"</h1>"))

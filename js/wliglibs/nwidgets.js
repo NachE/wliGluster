@@ -316,6 +316,12 @@ function Nradio(label_text, radio_value, nconfig_object, nconnector_object, pres
 		return this;
 	}
 
+	this.value = function(args){
+		return typeof args !== 'undefined' ?
+			this.content.find('.nradio_body').val(args) :
+			this.content.find('.nradio_body').val()
+	}
+
 }
 
 /***** generic events *****/
