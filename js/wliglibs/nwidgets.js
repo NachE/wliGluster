@@ -134,14 +134,21 @@ function Nviewtab(nconfig_object, nconnector_object, preset_uid){
 	this.newTab = function(tabname){
 		var newguid = guid();		
 		this.list_tab[newguid] = 
-			new Ntabbutton(nconfig_object, 
+			( 
+				new Ntabbutton(
+					nconfig_object, 
 					nconnector_object, 
-					newguid);
-		this.list_tab[newguid].append(tabname);
+					newguid
+				) 
+			).append(tabname);
+
 		this.list_tabcontent[newguid+'_content'] = 
 			new Ntabcontent(nconfig_object, 
 					nconnector_object, 
 					newguid+'_content');
+
+		//Put content directly using the tab object
+		this.list_tab[newguid].tabcontent = this.list_tabcontent[newguid+'_content'];
 
 		this.content.find('.ntabbuttons').append( 
 				this.list_tab[newguid].getContentObject()  );
@@ -195,12 +202,18 @@ function Ntabcontent(nconfig_object, nconnector_object, preset_uid){
 	Nwidget.call(this,nconfig_object,nconnector_object,preset_uid);
 	this.type='ntabcontent';
 	this.loadContent("ntabcontent.html");
+	this.tabcontent = {};	
 }
 
 function Ntabbutton(nconfig_object, nconnector_object, preset_uid){
 	Nwidget.call(this,nconfig_object, nconnector_object, preset_uid);
 	this.type='ntabbutton';
 	this.loadContent("ntabbutton.html");
+	this.tabcontent = {}
+
+	this.appendcontent = function(element){
+		return this.tabcontent.append(element);
+	}
 }
 
 function Nwindow(nconfig_object, nconnector_object, preset_uid){

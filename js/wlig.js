@@ -113,14 +113,40 @@ $(document).ready(function() {
 		}
 
 		this.tabVolumeinfo = function(gxml){
-			return false;
+
+			//create the tab if not exist
+			if(typeof this.nw['tabVolumeinfo'] === 'undefined' ){
+				this.nw['tabVolumeinfo'] = this.viewtab.newTab("Volume info");
+                        }
+			//I strongly hate clear contents
+			//See later to improve
+			this.viewtab.clear(this.nw['tabVolumeinfo']);
+
+			//var volname = "",
+			//	volumetype = "",
+			//	volumestatus = "";
+			//0 = Distribute, 1 = Unknown, 2 = Replicate
+			//var dic_volumetype = ["Distribute", "Unknown", "Replicate"];
+			//0 Created, 1 Started, 2 Stopped
+			//var dic_volumestatus = ["Created", "Started", "Stopped"];
+			$(gxml).find('cliOutput > volInfo > volumes > volume').each(function(){
+				//volname = $(this).find('name').text();
+				//volumetype = dic_volumetype[$(this).find('name').text()];
+
+				self.nw['tabVolumeinfo']
+					.appendcontent(
+						(new Nbox())
+							.append(new Nlabel("<h2>"+$(this).find('name').text()+"</h2>"))
+							.append(new Nlabel("test"))
+					);
+			});
 		}
 
 		//I dont like this way to manage tab widget, see later
 		//this func show the "volume list" command in a graphical way
 		this.tabVolumelist = function(gxml){
 			//create the tab if not exist
-			if(typeof this.nw['tabVolumelist'] == 'undefined' ){
+			if(typeof this.nw['tabVolumelist'] === 'undefined' ){
 				this.nw['tabVolumelist'] = this.viewtab.newTab("Volume list");
 			}
 			
@@ -304,7 +330,7 @@ $('form#clicommand').submit(function() {
 				
 				$(data).find('cliOutput > volInfo').each(
 				function(){
-					volumen_info(data); });
+					volumen_info(data); mainGui.tabVolumeinfo(data); }); 
 
 				$(data).find('cliOutput > volList').each(
 				function(){
