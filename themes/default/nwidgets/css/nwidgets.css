@@ -43,6 +43,8 @@ div, ul, li, form, p{
 
 .nbox{
 	border: 1px solid #000000;
+	margin: 10px;
+	padding: 10px;
 }
 
 .nbutton{
@@ -110,6 +112,7 @@ div, ul, li, form, p{
 	left: 0px;
 	width: 100%;
 	height: auto;
+	padding: 20px;
 	padding-bottom: 200px;
 	background-color: #ffffff;
 	border-top: 1px solid #000000;
@@ -162,4 +165,8 @@ div, ul, li, form, p{
 .nradio{
 	width: 100%;
 	text-align: left;
+}
+
+.nhline{
+	width: 100%;
 }

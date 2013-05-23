@@ -142,6 +142,8 @@ function Nviewtab(nconfig_object, nconnector_object, preset_uid){
 				) 
 			).append(tabname);
 
+		this.list_tab[newguid].tabview = this;
+
 		this.list_tabcontent[newguid+'_content'] = 
 			new Ntabcontent(nconfig_object, 
 					nconnector_object, 
@@ -210,6 +212,11 @@ function Ntabbutton(nconfig_object, nconnector_object, preset_uid){
 	this.type='ntabbutton';
 	this.loadContent("ntabbutton.html");
 	this.tabcontent = {}
+	this.tabview = {}
+
+	this.select = function(){
+		this.tabview.showTab(this.uid);
+	}
 
 	this.appendcontent = function(element){
 		return this.tabcontent.append(element);
@@ -336,6 +343,15 @@ function Nradio(label_text, radio_value, nconfig_object, nconnector_object, pres
 	}
 
 }
+
+function Nhline(nconfig_object, nconnector_object, preset_uid){
+Nwidget.call(this,nconfig_object, nconnector_object, preset_uid);
+	this.type='nhline';
+	this.loadContent("nhline.html");
+}
+
+
+
 
 /***** generic events *****/
 $(document).on('click','.nwindow_control .nwindow_control_close', function(){

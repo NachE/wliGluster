@@ -33,7 +33,7 @@ $(document).ready(function() {
 
 
 	/******* Testing the new libs **********/
-	nwindow = new Nwindow();
+	/* nwindow = new Nwindow();
 	nbutton = new Nbutton();
 	nbutton.append("This is a button");
 	nwindow.append( nbutton );
@@ -70,7 +70,7 @@ $(document).ready(function() {
 	form1.append(cosa1);
 	form1.append(cosa2);
 	form1.append("asdfff");
-	nwindow.append(form1);
+	nwindow.append(form1); */
 	/**** End of testing the new libs ****/
 
 
@@ -87,7 +87,8 @@ $(document).ready(function() {
 			var configMenu = new Nmenu('Configuration');
 			configMenu.addElement("General Config")
 				.onClick(function(){self.windowConfig()});
-			configMenu.addElement("Export Config");
+			configMenu.addElement("Export Config")
+				.onClick(function(){nconfig.export();});
 			configMenu.addElement("Import Config");
 			configMenu.content.css("float", "right");
 			configMenu.show();
@@ -126,20 +127,24 @@ $(document).ready(function() {
 			//	volumetype = "",
 			//	volumestatus = "";
 			//0 = Distribute, 1 = Unknown, 2 = Replicate
-			//var dic_volumetype = ["Distribute", "Unknown", "Replicate"];
+			var dic_volumetype = ["Distribute", "Unknown", "Replicate"];
 			//0 Created, 1 Started, 2 Stopped
-			//var dic_volumestatus = ["Created", "Started", "Stopped"];
+			var dic_volumestatus = ["Created", "Started", "Stopped"];
 			$(gxml).find('cliOutput > volInfo > volumes > volume').each(function(){
-				//volname = $(this).find('name').text();
-				//volumetype = dic_volumetype[$(this).find('name').text()];
-
-				self.nw['tabVolumeinfo']
-					.appendcontent(
-						(new Nbox())
-							.append(new Nlabel("<h2>"+$(this).find('name').text()+"</h2>"))
-							.append(new Nlabel("test"))
-					);
+				var box = (new Nbox())
+					.append(self.menuVolume($(this).find('name').text()))
+					.append(new Nhline())
+					.append(new Nlabel("<h2>"+$(this).find('name').text()+"</h2>"))
+					.append(new Nlabel("<p>"+dic_volumestatus[$(this).find('status').text()]+"</p>"))
+					.append(new Nlabel("<p>"+$(this).find('id').text()+"</p>"))
+					.append(new Nlabel("<p>"+dic_volumetype[$(this).find('name').text()]+"</p>"));
+				box.content.css({"float":"left"});
+				$(this).find('bricks > brick').each(function(){
+					box.append(new Nlabel("<p><strong>"+$(this).text()+"</strong></p>"));
+				});
+				self.nw['tabVolumeinfo'].appendcontent(box);
 			});
+			this.nw['tabVolumeinfo'].select();
 		}
 
 		//I dont like this way to manage tab widget, see later
@@ -261,34 +266,34 @@ $(document).ready(function() {
 	}
 
 	//making tabs events
-	$(document).on('click', '.tabitem', 
-	function(){
-		return show_tab($(this).attr('href').replace("#",""));
-	});
+	//$(document).on('click', '.tabitem', 
+	//function(){
+	//	return show_tab($(this).attr('href').replace("#",""));
+	//});
 
 	//making popup events
-	$('#popup #popupcontrol .close').click(
-	function(){
-		$('#popup').hide();
-	});
+	//$('#popup #popupcontrol .close').click(
+	//function(){
+	//	$('#popup').hide();
+	//});
 
 	//making menu events
-	$(document).on('click', '.menufirstitem', 
-	function(){
-		$(this).find('.menufirstgroup').toggle();
-	});
+	//$(document).on('click', '.menufirstitem', 
+	//function(){
+	//	$(this).find('.menufirstgroup').toggle();
+	//});
 
 	//events for config menu
-	$(document).on('click', '#config a[href="#config_wligluster"]', 
-	function(){
-		showform_config_wligluster();
-	});
+	//$(document).on('click', '#config a[href="#config_wligluster"]', 
+	//function(){
+	//	showform_config_wligluster();
+	//});
 
-	$(document).on('click', '#config a[href="#config_wligluster_export"]',
-	function(){
-		nconfig.export();
-		return false;
-	});
+	//$(document).on('click', '#config a[href="#config_wligluster_export"]',
+	//function(){
+	//	nconfig.export();
+	//	return false;
+	//});
 });
 
 $('form#clicommand').submit(function() {
@@ -330,11 +335,11 @@ $('form#clicommand').submit(function() {
 				
 				$(data).find('cliOutput > volInfo').each(
 				function(){
-					volumen_info(data); mainGui.tabVolumeinfo(data); }); 
+					mainGui.tabVolumeinfo(data); }); 
 
 				$(data).find('cliOutput > volList').each(
 				function(){
-					volumen_list(data); mainGui.tabVolumelist(data); });
+					mainGui.tabVolumelist(data); });
 
 				$(data).find('cliOutput > volStart').each(
 				function(){
